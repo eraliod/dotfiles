@@ -7,6 +7,8 @@ I forked this idea from Corey Schafer, who has a great instructional YouTube Cha
 
 The setup includes automated scripts for installing essential software, configuring Bash and Zsh shells, and setting up Visual Studio Code. This guide will help you replicate my development environment on your machine if you desire to do so.
 
+The zsh shell is set up as the default shell in the machine. It is augmented with oh-my-zsh, powerlevel10k theme, and the autosuggestions and syntax-highlighting plugins. This also requires a custom font for icons which will be downloaded by the scripts [Font Awesome terminal fonts](https://github.com/Homebrew/homebrew-cask-fonts/blob/master/Casks/font-awesome-terminal-fonts.rb)
+
 ## Important Note Before Installation
 
 **WARNING:** The configurations and scripts in this repository are **HIGHLY PERSONALIZED** to my own preferences and workflows. If you decide to use them, please be aware that they will **MODIFY** your current system, potentially making some changes that are **IRREVERSIBLE** without a fresh installation of your operating system.

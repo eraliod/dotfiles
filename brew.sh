@@ -34,6 +34,7 @@ packages=(
     "zsh"
     "git"
     "tree"
+    "powerlevel10k"
 )
 
 # Loop over the array to install each application.
@@ -63,6 +64,15 @@ read git_user_email
 # Set my git credentials
 $(brew --prefix)/bin/git config --global user.name "$git_user_name"
 $(brew --prefix)/bin/git config --global user.email "$git_user_email"
+
+# install the powerlevel10k theme for zsh
+directory=~/.oh-my-zsh
+if [ -d "$directory" ] && [ "$(ls -A $directory)" ]; then
+    echo "oh-my-zsh found in the default installation directory ~/.oh-my-zsh"
+else
+    echo "Installing oh-my-zsh"
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+fi
 
 # Define an array of applications to install using Homebrew Cask.
 apps=(
@@ -102,7 +112,7 @@ defaults import com.manytricks.Moom ${HOME}/dotfile/settings/Moom.plist
 brew tap | grep -q "^homebrew/cask-fonts$" || brew tap homebrew/cask-fonts
 
 # Define the font name
-font_name="font-source-code-pro"
+font_name="font-awesome-terminal-fonts"
 
 # Check if the font is already installed
 if brew list --cask | grep -q "^$font_name\$"; then
@@ -115,7 +125,7 @@ fi
 # Once font is installed, Import your Terminal Profile
 echo "Import your terminal settings..."
 echo "Terminal -> Settings -> Profiles -> Import..."
-echo "Import from ${HOME}/dotfiles/settings/Pro.terminal"
+echo "Import from ${HOME}/dotfiles/settings/CMS.terminal"
 echo "Press enter to continue..."
 read
 

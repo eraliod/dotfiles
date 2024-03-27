@@ -1,48 +1,64 @@
 {
-  "workbench.colorTheme": "Predawn",
-  "workbench.iconTheme": "ayu",
-  "editor.fontFamily": "Source Code Pro",
-  "debug.console.fontFamily": "Source Code Pro",
-  "editor.fontWeight": "500",
-  "terminal.integrated.fontWeight": "600",
-  "editor.fontSize": 16, //Use 22 for Screen Recordings
-  "debug.console.fontSize": 16, //Use 22 for Screen Recordings
-  "terminal.integrated.fontSize": 16, //Use 22 for Screen Recordings
-  "window.zoomLevel": 0, // Use 2 for Screen Recordings
-  "editor.formatOnSave": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "[shellscript]": {
-    "editor.defaultFormatter": "foxundermoon.shell-format"
-  },
-  "[python]": {
-    "editor.defaultFormatter": "ms-python.black-formatter",
-    "editor.formatOnSave": true,
-    "editor.codeActionsOnSave": {
-      "source.organizeImports": "always"
-    }
-  },
-  "pylint.args": ["--disable=C0114,C0115,C0116"],
-  "code-runner.clearPreviousOutput": true,
-  "code-runner.showExecutionMessage": false,
-  "code-runner.ignoreSelection": true,
-  "code-runner.saveFileBeforeRun": true,
-  "code-runner.executorMap": {
-    "python": "\"$pythonPath\" -u $fullFileName"
-  },
-  "[plaintext]": {
-    "editor.quickSuggestions": {
-      "comments": "off",
-      "strings": "off",
-      "other": "off"
-    }
-  },
-  "editor.quickSuggestionsDelay": 100,
-  "zenMode.centerLayout": false,
-  "zenMode.fullScreen": false,
-  "zenMode.hideLineNumbers": false,
-  "editor.minimap.enabled": false,
-  "workbench.settings.openDefaultSettings": true,
-  "workbench.settings.useSplitJSON": false,
-  "workbench.settings.editor": "json",
-  "workbench.startupEditor": "newUntitledFile"
+	// General Settings
+	"workbench.colorTheme": "One Dark Pro Darker",
+	"editor.fontFamily": "SourceCodePro+Powerline+Awesome",
+	"debug.console.fontFamily": "SourceCodePro+Powerline+Awesome",
+	"terminal.integrated.fontFamily": "Droid Sans Mono Awesome",
+	"editor.fontWeight": "500",
+	"terminal.integrated.fontWeight": "500",
+	"editor.fontSize": 14,
+	"debug.console.fontSize": 14,
+	"terminal.integrated.fontSize": 14,
+	"window.zoomLevel": 0,
+	"editor.quickSuggestionsDelay": 600,
+	"zenMode.centerLayout": false,
+	"zenMode.fullScreen": false,
+	"zenMode.hideLineNumbers": false,
+	"editor.minimap.enabled": false,
+	"workbench.settings.openDefaultSettings": true,
+	"workbench.settings.useSplitJSON": false,
+	// "workbench.settings.editor": "json",
+	"workbench.startupEditor": "newUntitledFile",
+    
+    // General Formatting
+	"editor.formatOnSave": false, // enable per language
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"prettier.useTabs": true,
+	"[shellscript]": {
+		"editor.defaultFormatter": "foxundermoon.shell-format"
+	},
+	"[plaintext]": {
+		"editor.quickSuggestions": {
+			"comments": "off",
+			"strings": "off",
+			"other": "off"
+		}
+	},
+
+	// Python Formatting and Linter
+	"pylint.args": ["--disable=C0114,C0115,C0116"],
+	"[python]": {
+		"editor.defaultFormatter": "ms-python.black-formatter",
+		"editor.formatOnSave": true,
+		"editor.codeActionsOnSave": {
+			"source.organizeImports": "always"
+		}
+	},
+	"black-formatter.args": ["--line-length=99"],
+
+	// Indent Rainbow
+	// The indent color if the number of spaces is not a multiple of "tabSize".
+	"indentRainbow.errorColor": "rgba(128,32,32,0.6)",
+	// The indent color when there is a mix between spaces and tabs.
+	// To be disabled this coloring set this to an empty string.
+	"indentRainbow.tabmixColor": "rgba(128,32,96,0.6)",
+	"indentRainbow.excludedLanguages": ["plaintext"],
+	"indentRainbow.indicatorStyle": "light",
+	"indentRainbow.lightIndicatorStyleLineWidth": 2,
+	"indentRainbow.colors": [
+		"rgba(255,255,64,0.3)",
+		"rgba(127,255,127,0.3)",
+		"rgba(255,127,255,0.3)",
+		"rgba(79,236,236,0.3)"
+	],
 }

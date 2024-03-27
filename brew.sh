@@ -76,6 +76,9 @@ read git_user_email
 $(brew --prefix)/bin/git config --global user.name "$git_user_name"
 $(brew --prefix)/bin/git config --global user.email "$git_user_email"
 
+# Set my git global preferences
+$(brew --prefix)/bin/git config --global --replace-all core.pager "less -F -X"  
+
 # install the powerlevel10k theme for zsh
 directory=~/.oh-my-zsh
 if [ -d "$directory" ] && [ "$(ls -A $directory)" ]; then

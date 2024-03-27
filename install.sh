@@ -10,7 +10,7 @@
 dotfiledir="${HOME}/dotfiles"
 
 # list of files/folders to symlink in ${homedir}
-files=(zshrc zprofile bashrc bash_profile bash_prompt aliases private)
+files=(zshrc zprofile bashrc bash_profile bash_prompt aliases private p10k.zsh)
 
 # backup the files into a dotfiles_backup directory if they exist
 mkdir ~/dotfiles_backup

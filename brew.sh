@@ -59,8 +59,9 @@ echo "$(brew --prefix)/bin/zsh" | sudo tee -a /etc/shells >/dev/null \
 && chsh -s "$(brew --prefix)/bin/zsh" \
 && echo "Successfully changed default shell to the homebrew zsh installation" \
 || echo "It appears the attempt failed" \
-&& echo "please manually add the homebrew path '${brew--prefix}' to the General terminal settings" \
+&& echo "please manually add the homebrew path '$(brew --prefix)' to the General terminal settings" \
 && echo "  by opening the terminal > Settings > General"
+read
 
 # Set the Homebrew zsh as default shell
 

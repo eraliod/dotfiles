@@ -52,5 +52,6 @@ fi
 # Open VS Code to sign-in to extensions
 code .
 echo "Login to extensions within VS Code."
+echo "use Option + Cmd + D to hide the dock"
 echo "Press enter to continue..."
 read

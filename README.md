@@ -55,7 +55,7 @@ This script will:
 -  `.bashrc` & `.zshrc`: Shell configuration files for Bash and Zsh.
 -  `.shared_prompt`: Custom prompt setup used by `.bash_prompt`
 -  `.bash_prompt`: Custom prompt setup for Bash.
--  `.bash_profile: Setting system-wide environment variables.
+-  `.bash_profile`: Setting system-wide environment variables.
 -  `.aliases`: Aliases for common commands.
 -  `.private`: This is a file you'll create locally to hold private information and shouldn't be uploaded to version control
 -  `settings/`: Directory containing settings for tools such as Visual Studio Code, Moom, etc.

@@ -19,19 +19,28 @@ extensions=(
     oderwat.indent-rainbow
 )
 
-# Get a list of all currently installed extensions.
-installed_extensions=$(code --list-extensions)
+# The installation of extensions via script is predicated on the code cli being present
+if [ command -v code ]; then
+    # Get a list of all currently installed extensions.
+    installed_extensions=$(code --list-extensions)
 
-for extension in "${extensions[@]}"; do
-    if echo "$installed_extensions" | grep -qi "^$extension$"; then
-        echo "$extension is already installed. Skipping..."
-    else
-        echo "Installing $extension..."
-        code --install-extension "$extension"
-    fi
-done
+    for extension in "${extensions[@]}"; do
+        if echo "$installed_extensions" | grep -qi "^$extension$"; then
+            echo "$extension is already installed. Skipping..."
+        else
+            echo "Installing $extension..."
+            code --install-extension "$extension"
+        fi
+    done
 
-echo "VS Code extensions have been installed."
+    echo "VS Code extensions have been installed."
+else
+    echo "VS Code CLI is not installed, extensions must be installed manually"
+    for extension in "${extensions[@]}"; do
+    echo "$extension"
+    done
+fi
+read
 
 # Define the target directory for VS Code user settings on macOS
 VSCODE_USER_SETTINGS_DIR="${HOME}/Library/Application Support/Code/User"

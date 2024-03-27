@@ -103,6 +103,7 @@ apps=(
     "discord"
     "spotify"
     "elgato-control-center"
+    "meetingbar"
 )
 
 # Loop over the array to install each application.

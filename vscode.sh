@@ -1,7 +1,7 @@
-#!/usr/bin/env zsh
+#!/bin/bash
 
 # Check if Homebrew's bin exists and if it's not already in the PATH
-if [ -x "/opt/homebrew/bin/brew" ] && [[ ":$PATH:" != *":/opt/homebrew/bin:"* ]]; then
+if [ -x "/opt/homebrew/bin/brew" ]; then
     export PATH="/opt/homebrew/bin:$PATH"
 fi
 
@@ -51,6 +51,6 @@ fi
 
 # Open VS Code to sign-in to extensions
 code .
-echo "Login to extensions (Copilot, Grammarly, etc) within VS Code."
+echo "Login to extensions within VS Code."
 echo "Press enter to continue..."
 read

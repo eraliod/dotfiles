@@ -10,7 +10,16 @@
 dotfiledir="${HOME}/dotfiles"
 
 # list of files/folders to symlink in ${homedir}
-files=(zshrc zprofile zprompt bashrc bash_profile bash_prompt aliases private)
+files=(zshrc zprofile bashrc bash_profile bash_prompt aliases private)
+
+# backup the files into a dotfiles_backup directory if they exist
+mkdir ~/dotfiles_backup
+for file in "${files[@]}"; do
+    if [ -f "${HOME}/.${file}" ]; then
+        echo "Backing up ${file}"
+        mv "${HOME}/.${file}" "${HOME}/dotfiles_backup/.${file}" 
+    fi
+done
 
 # change to the dotfiles directory
 echo "Changing to the ${dotfiledir} directory"

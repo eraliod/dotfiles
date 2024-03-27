@@ -29,12 +29,15 @@ brew cleanup
 
 # Define an array of packages to install using Homebrew.
 packages=(
-    "python"
+    "git"
     "bash"
     "zsh"
-    "git"
     "tree"
+    "python"
+    "awscli"
     "powerlevel10k"
+    "zsh-autosuggestions"
+    "zsh-syntax-highlighting"
 )
 
 # Loop over the array to install each application.
@@ -48,8 +51,16 @@ for package in "${packages[@]}"; do
 done
 
 # Add the Homebrew zsh to allowed shells
-echo "Changing default shell to Homebrew zsh"
+# this may not be possible on computers where you do not have admin (sudo) access such as a work laptop
+# for that reason, there is a try / catch block here. If we cannot add this, then the path to the homebrew
+# zsh installation can be manually input to the terminal settings
+echo "Attempting to change the default shell to Homebrew zsh"
 echo "$(brew --prefix)/bin/zsh" | sudo tee -a /etc/shells >/dev/null
+&& echo "Successfully changed default shell to the homebrew zsh installation" \
+|| echo "It appears the attempt failed" \
+&& echo "please manually add the homebrew path '${brew--prefix}' to the General terminal settings" \
+&& echo "  by opening the terminal > Settings > General"
+
 # Set the Homebrew zsh as default shell
 chsh -s "$(brew --prefix)/bin/zsh"
 
@@ -68,7 +79,7 @@ $(brew --prefix)/bin/git config --global user.email "$git_user_email"
 # install the powerlevel10k theme for zsh
 directory=~/.oh-my-zsh
 if [ -d "$directory" ] && [ "$(ls -A $directory)" ]; then
-    echo "oh-my-zsh found in the default installation directory ~/.oh-my-zsh"
+    echo "oh-my-zsh already installed in the default installation directory ~/.oh-my-zsh"
 else
     echo "Installing oh-my-zsh"
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
@@ -84,6 +95,7 @@ apps=(
     "docker"
     "raycast"
     "google-drive"
+    "dropzone"
     "gimp"
     "zoom"
     "vlc"
@@ -125,7 +137,7 @@ fi
 # Once font is installed, Import your Terminal Profile
 echo "Import your terminal settings..."
 echo "Terminal -> Settings -> Profiles -> Import..."
-echo "Import from ${HOME}/dotfiles/settings/CMS.terminal"
+echo "Import from ${HOME}/dotfiles/settings/DEC.terminal"
 echo "Press enter to continue..."
 read
 
@@ -148,5 +160,3 @@ read
 echo "Sign in to Discord. Press enter to continue..."
 read
 
-echo "Import your Rectangle settings located in ~/dotfiles/settings/RectangleConfig.json. Press enter to continue..."
-read

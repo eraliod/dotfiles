@@ -37,7 +37,8 @@ By using these scripts, you acknowledge and accept the risk of potential data lo
    ```sh
    cd ~/dotfiles
    ```
-3. Run the installation script:
+3. Here you should definitely take the time to comment out any of the applications inside brew.sh that you do not want
+4. Run the installation script:
    ```sh
    ./install.sh
    ```
@@ -63,6 +64,7 @@ This script will:
 
 You're encouraged to modify the scripts and configuration files to suit your preferences. Here are some tips for customization:
 
+-  **brew.sh**: Edit the array lists that contain the names of the brew formulae and casks that you want installed
 -  **Dotfiles**: Edit `.shared_prompt`, `.bash_prompt` to add or modify shell configurations.
 -  **VS Code**: Adjust settings in the `settings/` directory to change editor preferences and themes.
 

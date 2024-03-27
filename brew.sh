@@ -55,14 +55,14 @@ done
 # for that reason, there is a try / catch block here. If we cannot add this, then the path to the homebrew
 # zsh installation can be manually input to the terminal settings
 echo "Attempting to change the default shell to Homebrew zsh"
-echo "$(brew --prefix)/bin/zsh" | sudo tee -a /etc/shells >/dev/null
+echo "$(brew --prefix)/bin/zsh" | sudo tee -a /etc/shells >/dev/null \
+&& chsh -s "$(brew --prefix)/bin/zsh" \
 && echo "Successfully changed default shell to the homebrew zsh installation" \
 || echo "It appears the attempt failed" \
 && echo "please manually add the homebrew path '${brew--prefix}' to the General terminal settings" \
 && echo "  by opening the terminal > Settings > General"
 
 # Set the Homebrew zsh as default shell
-chsh -s "$(brew --prefix)/bin/zsh"
 
 # Git config name
 echo "Please enter your FULL NAME for Git configuration:"
@@ -85,7 +85,7 @@ if [ -d "$directory" ] && [ "$(ls -A $directory)" ]; then
     echo "oh-my-zsh already installed in the default installation directory ~/.oh-my-zsh"
 else
     echo "Installing oh-my-zsh"
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 fi
 
 # Define an array of applications to install using Homebrew Cask.
@@ -110,14 +110,21 @@ apps=(
 )
 
 # Loop over the array to install each application.
-for app in "${apps[@]}"; do
-    if brew list --cask | grep -q "^$app\$"; then
-        echo "$app is already installed. Skipping..."
-    else
-        echo "Installing $app..."
-        brew install --cask "$app"
-    fi
-done
+echo "Install applications through homebrew casks? (y/n) - for example if this is a work computer with no sudo administrator access, select 'n'"
+read choice
+
+if [ $choice = "y" ]; then
+    for app in "${apps[@]}"; do
+        if brew list --cask | grep -q "^$app\$"; then
+            echo "$app is already installed. Skipping..."
+        else
+            echo "Installing $app..."
+            brew install --cask "$app"
+        fi
+    done
+else
+    echo "Skipping application installation"
+fi
 
 # Moom settings
 # Settings can be exported from a source machine by changing 'import' to 'export'

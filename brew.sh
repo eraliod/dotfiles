@@ -56,14 +56,15 @@ done
 # zsh installation can be manually input to the terminal settings
 echo "Attempting to change the default shell to Homebrew zsh"
 echo "$(brew --prefix)/bin/zsh" | sudo tee -a /etc/shells >/dev/null \
+# Set the Homebrew zsh as default shell
 && chsh -s "$(brew --prefix)/bin/zsh" \
 && echo "Successfully changed default shell to the homebrew zsh installation" \
+# Alternatively, for locked down computers we cannot change the system default shell
+# But we can add the desired shell path to the terminal settings
 || echo "It appears the attempt failed" \
-&& echo "please manually add the homebrew path '$(brew --prefix)' to the General terminal settings" \
+&& echo "please manually add the homebrew path '$(brew --prefix)/bin/zsh' to the General terminal settings" \
 && echo "  by opening the terminal > Settings > General"
 read
-
-# Set the Homebrew zsh as default shell
 
 # Git config name
 echo "Please enter your FULL NAME for Git configuration:"
@@ -111,7 +112,9 @@ apps=(
 )
 
 # Loop over the array to install each application.
+echo ""
 echo "Install applications through homebrew casks? (y/n) - for example if this is a work computer with no sudo administrator access, select 'n'"
+echo "Type y or n and press Enter"
 read choice
 
 if [ $choice = "y" ]; then

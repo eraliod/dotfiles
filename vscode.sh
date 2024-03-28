@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env zsh
 
 # Check if Homebrew's bin exists and if it's not already in the PATH
 if [ -x "/opt/homebrew/bin/brew" ]; then
@@ -20,7 +20,7 @@ extensions=(
 )
 
 # The installation of extensions via script is predicated on the code cli being present
-if [ command -v code ]; then
+if command -v code &>/dev/null; then
     # Get a list of all currently installed extensions.
     installed_extensions=$(code --list-extensions)
 
@@ -35,7 +35,7 @@ if [ command -v code ]; then
 
     echo "VS Code extensions have been installed."
 else
-    echo "VS Code CLI is not installed, extensions must be installed manually"
+    print -P "%F{yellow}VS Code CLI is not installed, extensions must be installed manually%f."
     for extension in "${extensions[@]}"; do
     echo "$extension"
     done
@@ -55,12 +55,14 @@ if [ -d "$VSCODE_USER_SETTINGS_DIR" ]; then
 
     echo "VS Code settings have been updated."
 else
-    echo "VS Code user settings directory does not exist. Please ensure VS Code is installed."
+    print -P "%F{yellow}VS Code user settings directory does not exist%f. Please ensure VS Code is installed. Or open manually if it has never been opened."
 fi
 
 # Open VS Code to sign-in to extensions
-code .
+code . &>/dev/null
 echo "Login to extensions within VS Code."
+echo
 echo "use Option + Cmd + D to hide the dock"
+echo
 echo "Press enter to continue..."
 read

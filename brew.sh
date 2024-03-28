@@ -2,9 +2,14 @@
 
 # Install Homebrew if it isn't already installed
 if ! command -v brew &>/dev/null; then
-    echo "Homebrew not installed. Installing Homebrew."
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
+    if [ $admin_response = 'Y' ]; then
+        echo "Homebrew not installed. Installing Homebrew."
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    else
+        print -P "Homebrew is not installed, and you indicated you %F{red}do not have administrator rights%f. Skipping brew installations..."
+        echo
+        exit
+    fi
     # Attempt to set up Homebrew PATH automatically for this session
     if [ -x "/opt/homebrew/bin/brew" ]; then
         # For Apple Silicon Macs
@@ -51,20 +56,26 @@ for package in "${packages[@]}"; do
 done
 
 # Add the Homebrew zsh to allowed shells
-# this may not be possible on computers where you do not have admin (sudo) access such as a work laptop
-# for that reason, there is a try / catch block here. If we cannot add this, then the path to the homebrew
-# zsh installation can be manually input to the terminal settings
-echo "Attempting to change the default shell to Homebrew zsh"
-echo "$(brew --prefix)/bin/zsh" | sudo tee -a /etc/shells >/dev/null \
-# Set the Homebrew zsh as default shell
-&& chsh -s "$(brew --prefix)/bin/zsh" \
-&& echo "Successfully changed default shell to the homebrew zsh installation" \
-# Alternatively, for locked down computers we cannot change the system default shell
-# But we can add the desired shell path to the terminal settings
-|| echo "It appears the attempt failed" \
-&& echo "please manually add the homebrew path '$(brew --prefix)/bin/zsh' to the General terminal settings" \
-&& echo "  by opening the terminal > Settings > General"
-read
+if [ $admin_response = 'Y' ]; then
+    echo
+    echo "Attempting to change the default shell to Homebrew zsh"
+    echo "$(brew --prefix)/bin/zsh" | sudo tee -a /etc/shells >/dev/null
+    # Set the Homebrew zsh as default shell
+    chsh -s "$(brew --prefix)/bin/zsh"
+    echo "Successfully changed default shell to the homebrew zsh installation"
+    echo
+else
+    echo
+    print -P "%F{yellow}Without administrator rights, script cannot make the brew installed zsh as the default shell%f.
+While this is not completely necessary, it is possible to default to this shell by changing the terminal settings via the UI.
+To do this:
+1. Open the Terminal
+2. Open Settings > General
+3. Enter the path $(brew --prefix)/bin/zsh in the 'Shells open with' option
+
+Press ENTER to continue"
+    read
+fi
 
 # Git config name
 echo "Please enter your FULL NAME for Git configuration:"
@@ -112,12 +123,7 @@ apps=(
 )
 
 # Loop over the array to install each application.
-echo ""
-echo "Install applications through homebrew casks? (y/n) - for example if this is a work computer with no sudo administrator access, select 'n'"
-echo "Type y or n and press Enter"
-read choice
-
-if [ $choice = "y" ]; then
+if [ $admin_response = 'Y' ]; then
     for app in "${apps[@]}"; do
         if brew list --cask | grep -q "^$app\$"; then
             echo "$app is already installed. Skipping..."
@@ -127,7 +133,7 @@ if [ $choice = "y" ]; then
         fi
     done
 else
-    echo "Skipping application installation"
+    print -P "%F{Yellow}Skipping application installations. Because no admin rights%f."
 fi
 
 # Moom settings
@@ -150,7 +156,8 @@ else
 fi
 
 # Once font is installed, Import your Terminal Profile
-echo "Import your terminal settings..."
+echo
+print -P "%F{green}Import your terminal settings...%f"
 echo "Terminal -> Settings -> Profiles -> Import..."
 echo "Import from ${HOME}/dotfiles/settings/DEC.terminal"
 echo "Press enter to continue..."
@@ -162,16 +169,17 @@ brew upgrade
 brew upgrade --cask
 brew cleanup
 
-echo "Use Spotlight ⌘Space, type 'Keyboard Shortcuts', go to Spotlight. Change shortcut to ⌥Space"
-echo "Grab the Raycast Export from a private share (contains private keys, cannot be committed to repo)"
-echo "Import Raycast Settings under Advanced Options"
+if [ $admin_response = 'Y' ]; then
+    echo "Use Spotlight ⌘Space, type 'Keyboard Shortcuts', go to Spotlight. Change shortcut to ⌥Space"
+    echo "Grab the Raycast Export from a private share (contains private keys, cannot be committed to repo)"
+    echo "Import Raycast Settings under Advanced Options"
 
-echo "Sign in to Google Chrome. Press enter to continue..."
-read
+    echo "Sign in to Google Chrome. Press enter to continue..."
+    read
 
-echo "Sign in to Spotify. Press enter to continue..."
-read
+    echo "Sign in to Spotify. Press enter to continue..."
+    read
 
-echo "Sign in to Discord. Press enter to continue..."
-read
-
+    echo "Sign in to Discord. Press enter to continue..."
+    read
+fi

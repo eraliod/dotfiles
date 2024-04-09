@@ -40,6 +40,7 @@ packages=(
     "tree"
     "python"
     "awscli"
+    "fzf"
     "powerlevel10k"
     "zsh-autosuggestions"
     "zsh-syntax-highlighting"

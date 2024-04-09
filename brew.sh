@@ -141,7 +141,7 @@ fi
 
 # Moom settings
 # Settings can be exported from a source machine by changing 'import' to 'export'
-defaults import com.manytricks.Moom ${HOME}/dotfile/settings/Moom.plist
+defaults import com.manytricks.Moom ${HOME}/dotfiles/settings/Moom.plist
 
 # Install Source Code Pro Font
 # Tap the Homebrew font cask repository if not already tapped

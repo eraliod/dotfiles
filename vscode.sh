@@ -40,6 +40,7 @@ else
     echo "$extension"
     done
 fi
+echo "Press enter to continue..."
 read
 
 # Define the target directory for VS Code user settings on macOS

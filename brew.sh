@@ -98,7 +98,9 @@ if [ -d "$directory" ] && [ "$(ls -A $directory)" ]; then
     echo "oh-my-zsh already installed in the default installation directory ~/.oh-my-zsh"
 else
     echo "Installing oh-my-zsh"
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"; exit
+    # Because oh-my-zsh installation creates a new .zshrc file, must re-point .zshrc symlink
+    ln -sf "${dotfiledir}/.zshrc" "${HOME}/.zshrc"
 fi
 
 # Define an array of applications to install using Homebrew Cask.

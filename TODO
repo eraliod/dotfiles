@@ -1,0 +1,2 @@
+wrap the whole thing with an exit handler
+store sudo password temporarily in keychain (previous step is needed for this to ensure we delete the temp password when exiting)

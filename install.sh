@@ -71,4 +71,10 @@ done
 # Run VS Code Script
 ./vscode.sh
 
+print -P "%F{yellow}Would you like to remove all default icons from the macOS dock?(y/n)%f "
+    read kill_dock
+    if [ ${admin_response:u} = 'Y' ]; then
+        defaults write com.apple.dock persistent-apps -array ""; killall Dock
+    fi
+
 echo "Installation Complete!"

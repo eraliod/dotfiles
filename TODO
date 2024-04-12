@@ -1,2 +1,2 @@
 TODO: wrap the whole thing with an exit handler
-TODO: store sudo password temporarily in keychain (previous step is needed for this to ensure we delete the temp password when exiting)
+TODO: store sudo password temporarily in keychain (previous step is needed for this to ensure we delete the temp password when exiting). Maybe with SUDO_ASKPASS.

@@ -1,4 +1,3 @@
-
 # Set PATHS
 if [ -x "/opt/homebrew/bin/brew" ]; then
     # For Apple Silicon Macs
@@ -17,3 +16,10 @@ ap () {
   fi
   export AWS_PROFILE="$profile"
 }
+
+# Golang environment variables run if go installed with brew
+if brew list go &>/dev/null; then
+    export GOROOT=$(brew --prefix go)/libexec
+    export GOPATH=$HOME/go
+    export PATH=$GOPATH/bin:$GOROOT/bin:$HOME/.local/bin:$PATH
+fi

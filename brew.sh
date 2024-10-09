@@ -42,6 +42,7 @@ packages=(
     "python"
     "awscli"
     "fzf"
+    "go"
     "powerlevel10k"
     "zsh-autosuggestions"
     "zsh-syntax-highlighting"

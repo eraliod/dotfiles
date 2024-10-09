@@ -108,16 +108,22 @@ fi
 
 # Define an array of applications to install using Homebrew Cask.
 apps=(
+    "google-chrome"
     "firefox"
     "visual-studio-code"
     "moom"
     "cheatsheet"
     "docker"
     "raycast"
+    "google-drive"
     "dropzone"
     "gimp"
     "zoom"
     "vlc"
+    "steam"
+    "discord"
+    "spotify"
+    "elgato-control-center"
     "meetingbar"
 )
 

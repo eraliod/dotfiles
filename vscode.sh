@@ -11,6 +11,7 @@ extensions=(
     ms-python.pylint
     ms-python.vscode-pylance
     ms-python.debugpy
+    ms-python.black-formatter
     znck.grammarly
     usernamehw.errorlens
     vscodevim.vim

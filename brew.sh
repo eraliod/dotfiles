@@ -125,6 +125,7 @@ apps=(
     "spotify"
     "elgato-control-center"
     "meetingbar"
+    "obsidian"
 )
 
 # Loop over the array to install each application.

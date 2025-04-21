@@ -18,3 +18,6 @@ alias clean='rm -rf ~/.Trash/*; rm -rf ~/Downloads/*'
 
 # add Github key back onto keychain
 alias gitkeyfix='ssh-add ~/.ssh/github_personal'
+
+# terramate
+alias trc='terramate run --changed'

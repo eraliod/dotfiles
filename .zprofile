@@ -23,3 +23,22 @@ if brew list go &>/dev/null; then
     export GOPATH=$HOME/go
     export PATH=$GOPATH/bin:$GOROOT/bin:$HOME/.local/bin:$PATH
 fi
+
+# function to easily pick databricks profile from ~/.databrickscfg file
+dp () {
+  profile=${1:-}
+  if [[ -z "$profile" ]]
+  then
+    profile=$(databricks auth profiles | awk 'NR>1 {print $1}' | fzf)
+  fi
+  export DATABRICKS_CONFIG_PROFILE="$profile"
+}
+
+# function deletes all local branches not present in remote
+gbdg () {
+    git fetch -p && git branch -vv | grep ': gone]' | awk '{print $1}' | xargs -n 1 echo git branch -D
+}
+
+# terramate
+export TM_DISABLE_SAFEGUARDS=git-untracked,git-uncommitted,git-out-of-sync
+

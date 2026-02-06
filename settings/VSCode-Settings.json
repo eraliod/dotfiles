@@ -10,6 +10,8 @@
   "editor.minimap.enabled": false,
   "editor.quickSuggestionsDelay": 600,
   "editor.largeFileOptimizations": false,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "security.workspace.trust.untrustedFiles": "open",
   "window.zoomLevel": 0,
   "zenMode.centerLayout": false,
   "zenMode.fullScreen": false,
@@ -31,12 +33,45 @@
   // TERMINAL
   // ═══════════════════════════════════════════════════════════════════════════
   "terminal.integrated.enableMultiLinePasteWarning": "never",
+  "terminal.integrated.enableImages": true,
+  "terminal.integrated.defaultProfile.linux": "bash",
+  "terminal.integrated.defaultProfile.osx": "zsh",
+  "terminal.integrated.defaultProfile.windows": "Command Prompt",
+  "terminal.integrated.profiles.linux": {
+    "bash": {
+      "path": "/bin/bash"
+    },
+    "sh": {
+      "path": "/bin/sh"
+    }
+  },
+  "terminal.integrated.profiles.osx": {
+    "zsh": {
+      "path": "/bin/zsh"
+    },
+    "bash": {
+      "path": "/bin/bash"
+    }
+  },
+  "terminal.integrated.profiles.windows": {
+    "Command Prompt": {
+      "path": "${env:windir}\\System32\\cmd.exe"
+    }
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // FILE ASSOCIATIONS
+  // ═══════════════════════════════════════════════════════════════════════════
+  "files.associations": {
+    "CODEOWNERS": "plaintext",
+    "*.tm.hcl": "terramate",
+    "*.tf.tmgen": "tf"
+  },
 
   // ═══════════════════════════════════════════════════════════════════════════
   // FORMATTING (GENERAL)
   // ═══════════════════════════════════════════════════════════════════════════
   "editor.formatOnSave": false, // enable per language
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "prettier.useTabs": true,
   "diffEditor.ignoreTrimWhitespace": false,
   // The indent color if the number of spaces is not a multiple of "tabSize".
@@ -70,12 +105,11 @@
   "[json]": {
     "editor.defaultFormatter": "vscode.json-language-features"
   },
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
   "[markdown]": {
     "diffEditor.ignoreTrimWhitespace": true
-  },
-  "[terraform]": {
-    "editor.tabSize": 2,
-    "editor.defaultFormatter": "hashicorp.terraform"
   },
   "[dockercompose]": {
     "editor.insertSpaces": true,
@@ -88,29 +122,51 @@
     },
     "editor.defaultFormatter": "redhat.vscode-yaml"
   },
+  "[dockerfile]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format"
+  },
   "[github-actions-workflow]": {
-    "editor.defaultFormatter": "redhat.vscode-yaml"
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[ignore]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format"
+  },
+  "[toml]": {
+    "editor.defaultFormatter": "tamasfe.even-better-toml"
   },
 
   // ═══════════════════════════════════════════════════════════════════════════
   // PYTHON
   // ═══════════════════════════════════════════════════════════════════════════
-  "pylint.args": ["--disable=C0114,C0115,C0116", "--max-line-length=160"],
   "python.analysis.extraPaths": ["src"],
   "[python]": {
-    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.defaultFormatter": "charliermarsh.ruff",
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
-      "source.organizeImports": "always"
+      "source.fixAll": "explicit",
+      "source.organizeImports": "explicit"
     },
     "diffEditor.ignoreTrimWhitespace": true
   },
-  "black-formatter.args": ["--line-length=99"],
+  "ruff.nativeServer": true,
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // TERRAFORM
+  // ═══════════════════════════════════════════════════════════════════════════
+  "[terraform]": {
+    "editor.tabSize": 2,
+    "editor.defaultFormatter": "hashicorp.terraform"
+  },
+  "[terraform-vars]": {
+    "editor.defaultFormatter": "hashicorp.terraform"
+  },
+  "terraform.mcp.server.enable": false,
 
   // ═══════════════════════════════════════════════════════════════════════════
   // GIT & VERSION CONTROL
   // ═══════════════════════════════════════════════════════════════════════════
   "git.confirmSync": false,
+  "git.replaceTagsWhenPull": true,
 
   // ═══════════════════════════════════════════════════════════════════════════
   // DOCKER
@@ -120,14 +176,77 @@
   // ═══════════════════════════════════════════════════════════════════════════
   // GITHUB COPILOT
   // ═══════════════════════════════════════════════════════════════════════════
-  "github.copilot.editor.enableAutoCompletions": true,
-  "github.copilot.nextEditSuggestions.enabled": true,
+  "github.copilot.chat.commitMessageGeneration.instructions": [
+    {
+      "text": "Use conventional commit format: {type}: {concise subject line summarizing the overall change}"
+    },
+    {
+      "text": "Types: feat (new feature), fix (bug fix), refactor (code restructure), docs (documentation), style (formatting), test (tests), build (build system)"
+    },
+    {
+      "text": "Subject line: present tense, imperative mood, under 72 characters, no period at end"
+    },
+    {
+      "text": "For commits with multiple changes, add a blank line then bulleted list using hyphens"
+    },
+    {
+      "text": "Each bullet: specific change using present tense imperative (e.g., 'Add X feature', 'Remove deprecated Y', 'Update Z configuration')"
+    },
+    {
+      "text": "Focus on what changed and why, not implementation details"
+    },
+    {
+      "text": "Example single-line commit: 'fix: resolve race condition in async task handler'"
+    },
+    {
+      "text": "Example multi-line commit: 'feat: update Claude Code settings with latest features\\n\\n- Replace deprecated includeCoAuthoredBy with attribution config\\n- Add MAX_THINKING_TOKENS for extended reasoning\\n- Enable auto-approval for project MCP servers\\n- Add security deny rules for credential paths'"
+    }
+  ],
+  "github.copilot.chat.pullRequestDescriptionGeneration.instructions": [
+    {
+      "text": "PR title: Use same conventional commit format as commit messages (e.g., 'feat: add user authentication system')"
+    },
+    {
+      "text": "PR body structure: Start with ## Summary section containing 1-3 bullet points explaining what changed and why"
+    },
+    {
+      "text": "Summary bullets: Focus on business value and impact, not implementation details"
+    },
+    {
+      "text": "After Summary, add ## Test plan section with bulleted checklist of verification steps"
+    },
+    {
+      "text": "Test plan format: Use markdown checkboxes (- [ ]) for manual testing steps"
+    },
+    {
+      "text": "For complex changes, optionally add ## Implementation notes with before/after code examples using markdown code blocks"
+    },
+    {
+      "text": "Keep total PR description concise - most PRs need only Summary and Test plan sections"
+    },
+    {
+      "text": "Example PR body: '## Summary\\n- Updated Claude Code settings to latest version\\n- Added security protections for credential files\\n- Enabled new reasoning features\\n\\n## Test plan\\n- [ ] Verify settings load without errors\\n- [ ] Confirm security rules block credential access\\n- [ ] Test extended thinking on complex tasks'"
+    }
+  ],
+  "github.copilot.chat.agent.thinkingTool": true,
+  "github.copilot.advanced": {},
   "github.copilot.enable": {
     "*": true,
     "plaintext": false,
     "markdown": false,
     "scminput": false
   },
+  "github.copilot.editor.enableCodeActions": false,
+  "github.copilot.editor.enableAutoCompletions": true,
+  "github.copilot.nextEditSuggestions.enabled": true,
+  "github.copilot.chat.copilotDebugCommand.enabled": false,
+  "github.copilot.chat.reviewAgent.enabled": false,
+  "github.copilot.chat.reviewSelection.enabled": false,
+  "github.copilot.chat.startDebugging.enabled": false,
+  "github.copilot.chat.newWorkspaceCreation.enabled": false,
+  "github.copilot.chat.setupTests.enabled": false,
+  "github.copilot.chat.codesearch.enabled": true,
+  "github.copilot.chat.codeGeneration.useInstructionFiles": true,
 
   // ═══════════════════════════════════════════════════════════════════════════
   // AI TOOLS & MCP
@@ -138,12 +257,16 @@
     "cursor-global": true,
     "cursor-workspace": true
   },
+  "chat.agent.maxRequests": 50,
+  "chat.useAgentsMdFile": true,
   "gitlens.ai.model": "vscode",
   "gitlens.ai.vscode.model": "copilot:gpt-4.1",
   "claudeCode.preferredLocation": "panel",
+  "claudeCode.useTerminal": true,
 
   // ═══════════════════════════════════════════════════════════════════════════
   // PRIVACY & TELEMETRY
   // ═══════════════════════════════════════════════════════════════════════════
+  "telemetry.telemetryLevel": "off",
   "redhat.telemetry.enabled": false
 }

@@ -19,3 +19,9 @@ Thumbs.db
 
 # Python
 venv/
+
+# Node
+node_modules/
+
+# Archived bash files (work in progress)
+_bash_archive/

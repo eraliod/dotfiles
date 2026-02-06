@@ -1,0 +1,169 @@
+version = 1
+
+###############################################################################
+# Python Development Environment
+###############################################################################
+
+[envs.python]
+channels = ["conda-forge"]
+dependencies = { python = "3.12.*" }
+exposed = { 2to3 = "2to3", "2to3-3.12" = "2to3-3.12", idle3 = "idle3", "idle3.12" = "idle3.12", pydoc = "pydoc", pydoc3 = "pydoc3", "pydoc3.12" = "pydoc3.12", python = "python", python3 = "python3", python3-config = "python3-config", "python3.1" = "python3.1", "python3.12" = "python3.12", "python3.12-config" = "python3.12-config" }
+
+[envs.pip]
+channels = ["conda-forge"]
+dependencies = { pip = "25.0.*" }
+exposed = { pip = "pip", pip3 = "pip3" }
+
+[envs.uv]
+channels = ["conda-forge"]
+dependencies = { uv = "0.7.*" }
+exposed = { uv = "uv", uvx = "uvx" }
+
+[envs.ruff]
+channels = ["conda-forge"]
+dependencies = { ruff = "0.11.*" }
+exposed = { ruff = "ruff" }
+
+[envs.pytest]
+channels = ["conda-forge"]
+dependencies = { pytest = "8.3.*" }
+exposed = { pytest = "pytest", "py.test" = "py.test" }
+
+[envs.ty]
+channels = ["conda-forge"]
+dependencies = { ty = "0.*" }
+exposed = { ty = "ty" }
+
+[envs.rust]
+channels = ["conda-forge"]
+dependencies = { rust = "1.91.*" }
+exposed = { rustc = "rustc", cargo = "cargo", rustdoc = "rustdoc", rust-gdb = "rust-gdb", rust-lldb = "rust-lldb", cargo-clippy = "cargo-clippy", cargo-fmt = "cargo-fmt", clippy-driver = "clippy-driver", rust-analyzer = "rust-analyzer", rust-gdbgui = "rust-gdbgui", rustfmt = "rustfmt" }
+
+###############################################################################
+# Infrastructure & DevOps Tools
+###############################################################################
+
+[envs.terraform]
+channels = ["conda-forge"]
+dependencies = { terraform = "1.9.*" }
+exposed = { terraform = "terraform" }
+
+[envs.pre-commit]
+channels = ["conda-forge"]
+dependencies = { pre-commit = "3.8.*" }
+exposed = { pre-commit = "pre-commit" }
+
+[envs.prek]
+channels = ["conda-forge"]
+dependencies = { prek = "0.2.*" }
+exposed = { prek = "prek" }
+
+[envs.gh]
+channels = ["conda-forge"]
+dependencies = { gh = "2.79.*" }
+exposed = { gh = "gh" }
+
+[envs.databricks-cli]
+channels = ["conda-forge"]
+dependencies = { databricks-cli = "0.271.*" }
+exposed = { databricks = "databricks" }
+
+[envs.databricks-sdk]
+channels = ["conda-forge"]
+dependencies = { databricks-sdk = "0.78.*" }
+
+[envs.awscli]
+channels = ["conda-forge"]
+dependencies = { awscli = "2.30.*" }
+exposed = { aws = "aws", aws_completer = "aws_completer" }
+
+###############################################################################
+# Search & Navigation Tools
+###############################################################################
+
+[envs.fzf]
+channels = ["conda-forge"]
+dependencies = { fzf = "0.65.*" }
+exposed = { fzf = "fzf" }
+
+[envs.fd-find]
+channels = ["conda-forge"]
+dependencies = { fd-find = "10.3.*" }
+exposed = { fd = "fd" }
+
+[envs.tree]
+channels = ["conda-forge"]
+dependencies = { tree = "2.2.*" }
+exposed = { tree = "tree" }
+
+[envs.ast-grep]
+channels = ["conda-forge"]
+dependencies = { ast-grep = "0.39.*" }
+exposed = { ast-grep = "ast-grep", sg = "sg" }
+
+[envs.ripgrep]
+channels = ["conda-forge"]
+dependencies = { ripgrep = "14.1.*" }
+exposed = { rg = "rg" }
+
+[envs.bat]
+channels = ["conda-forge"]
+dependencies = { bat = "0.25.*" }
+exposed = { bat = "bat" }
+
+###############################################################################
+# Data Processing & Formatting
+###############################################################################
+
+[envs.jq]
+channels = ["conda-forge"]
+dependencies = { jq = "1.8.*" }
+exposed = { jq = "jq" }
+
+[envs.yq]
+channels = ["conda-forge"]
+dependencies = { yq = "3.4.*" }
+exposed = { yq = "yq" }
+
+[envs.pyspark]
+channels = ["conda-forge"]
+dependencies = { pyspark = "4.0.*" }
+exposed = { beeline = "beeline", "beeline.cmd" = "beeline.cmd", docker-image-tool = "docker-image-tool", find-spark-home = "find-spark-home", "find-spark-home.cmd" = "find-spark-home.cmd", find_spark_home = "find_spark_home", "load-spark-env.cmd" = "load-spark-env.cmd", load-spark-env = "load-spark-env", pyspark = "pyspark", "pyspark.cmd" = "pyspark.cmd", "pyspark2.cmd" = "pyspark2.cmd", run-example = "run-example", "run-example.cmd" = "run-example.cmd", spark-class = "spark-class", "spark-class.cmd" = "spark-class.cmd", "spark-class2.cmd" = "spark-class2.cmd", spark-connect-shell = "spark-connect-shell", spark-shell = "spark-shell", "spark-shell.cmd" = "spark-shell.cmd", "spark-shell2.cmd" = "spark-shell2.cmd", spark-sql = "spark-sql", "spark-sql.cmd" = "spark-sql.cmd", "spark-sql2.cmd" = "spark-sql2.cmd", spark-submit = "spark-submit", "spark-submit.cmd" = "spark-submit.cmd", "spark-submit2.cmd" = "spark-submit2.cmd", sparkR = "sparkR", "sparkR.cmd" = "sparkR.cmd", "sparkR2.cmd" = "sparkR2.cmd" }
+
+###############################################################################
+# Code Quality & Analysis Tools
+###############################################################################
+
+[envs.shellcheck]
+channels = ["conda-forge"]
+dependencies = { shellcheck = "0.10.*" }
+exposed = { shellcheck = "shellcheck" }
+
+[envs.shfmt]
+channels = ["conda-forge"]
+dependencies = { go-shfmt = "3.12.*" }
+exposed = { shfmt = "shfmt" }
+
+[envs.difftastic]
+channels = ["conda-forge"]
+dependencies = { difftastic = "0.63.*" }
+exposed = { difft = "difft" }
+
+[envs.prettier]
+channels = ["conda-forge"]
+dependencies = { prettier = "3.6.*" }
+exposed = { prettier = "prettier" }
+
+###############################################################################
+# Frontend & JavaScript Development
+###############################################################################
+
+[envs.nodejs]
+channels = ["conda-forge"]
+dependencies = { nodejs = "24.4.*" }
+exposed = { corepack = "corepack", node = "node", npm = "npm", npx = "npx" }
+
+[envs.go]
+channels = ["conda-forge"]
+dependencies = { go = "1.25.*" }
+exposed = { go = "go", gofmt = "gofmt" }

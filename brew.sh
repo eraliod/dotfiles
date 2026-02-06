@@ -5,16 +5,17 @@ if ! command -v brew &>/dev/null; then
     if [ $admin_response = 'Y' ]; then
         echo "Homebrew not installed. Installing Homebrew."
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+        # Attempt to set up Homebrew PATH automatically for this session
+        if [ -x "/opt/homebrew/bin/brew" ]; then
+            # For Apple Silicon Macs
+            echo "Configuring Homebrew in PATH for Apple Silicon Mac..."
+            export PATH="/opt/homebrew/bin:$PATH"
+        fi
     else
         print -P "Homebrew is not installed, and you indicated you %F{red}do not have administrator rights%f. Skipping brew installations..."
         echo
         exit
-    fi
-    # Attempt to set up Homebrew PATH automatically for this session
-    if [ -x "/opt/homebrew/bin/brew" ]; then
-        # For Apple Silicon Macs
-        echo "Configuring Homebrew in PATH for Apple Silicon Mac..."
-        export PATH="/opt/homebrew/bin:$PATH"
     fi
 else
     echo "Homebrew is already installed."
@@ -33,17 +34,19 @@ brew upgrade --cask
 brew cleanup
 
 # Define an array of packages to install using Homebrew.
+# Note: awscli, fzf, go, and tree are managed by pixi global (see settings/pixi-global.toml)
+# Python is kept in brew because some brew packages (like thefuck) depend on it
 packages=(
-    "git"
     "bash"
-    "zsh"
-    "fzf"
-    "tree"
-    "python"
-    "awscli"
-    "fzf"
-    "go"
+    "duckdb"
+    "git"
+    "pixi"
     "powerlevel10k"
+    "python"
+    "terramate"
+    "thefuck"
+    "wget"
+    "zsh"
     "zsh-autosuggestions"
     "zsh-syntax-highlighting"
 )
@@ -58,18 +61,23 @@ for package in "${packages[@]}"; do
     fi
 done
 
-# Add the Homebrew zsh to allowed shells
-if [ $admin_response = 'Y' ]; then
-    echo
-    echo "Attempting to change the default shell to Homebrew zsh"
-    echo "$(brew --prefix)/bin/zsh" | sudo tee -a /etc/shells >/dev/null
-    # Set the Homebrew zsh as default shell
-    chsh -s "$(brew --prefix)/bin/zsh"
-    echo "Successfully changed default shell to the homebrew zsh installation"
-    echo
-else
-    echo
-    print -P "%F{yellow}Without administrator rights, script cannot make the brew installed zsh as the default shell%f.
+# Get the path to Homebrew's zsh
+BREW_ZSH="$(brew --prefix)/bin/zsh"
+# Check if Homebrew's zsh is already the default shell
+if [ "$SHELL" != "$BREW_ZSH" ]; then
+    if [ $admin_response = 'Y' ]; then
+        echo "Changing default shell to Homebrew zsh"
+        # Check if Homebrew's zsh is already in allowed shells
+        if ! grep -Fxq "$BREW_ZSH" /etc/shells; then
+            echo "Adding Homebrew zsh to allowed shells"
+            echo "$BREW_ZSH" | sudo tee -a /etc/shells >/dev/null
+        fi
+        # Set the Homebrew zsh as default shell
+        chsh -s "$BREW_ZSH"
+        echo "Default shell changed to Homebrew zsh."
+    else
+        echo
+        print -P "%F{yellow}Without administrator rights, script cannot make the brew installed zsh as the default shell%f.
 While this is not completely necessary, it is possible to default to this shell by changing the terminal settings via the UI.
 To do this:
 1. Open the Terminal
@@ -77,55 +85,31 @@ To do this:
 3. Enter the path $(brew --prefix)/bin/zsh in the 'Shells open with' option
 
 Press ENTER to continue"
-    read
-fi
-
-# Git config name
-echo "Please enter your FULL NAME for Git configuration:"
-read git_user_name
-
-# Git config email
-echo "Please enter your EMAIL for Git configuration:"
-read git_user_email
-
-# Set my git credentials
-$(brew --prefix)/bin/git config --global user.name "$git_user_name"
-$(brew --prefix)/bin/git config --global user.email "$git_user_email"
-
-# Set my git global preferences
-$(brew --prefix)/bin/git config --global --replace-all core.pager "less -F -X"  
-
-# install the powerlevel10k theme for zsh
-directory=~/.oh-my-zsh
-if [ -d "$directory" ] && [ "$(ls -A $directory)" ]; then
-    echo "oh-my-zsh already installed in the default installation directory ~/.oh-my-zsh"
+        read
+    fi
 else
-    echo "Installing oh-my-zsh"
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"; exit
-    # Because oh-my-zsh installation creates a new .zshrc file, must re-point .zshrc symlink
-    ln -sf "${dotfiledir}/.zshrc" "${HOME}/.zshrc"
+    echo "Homebrew zsh is already the default shell. Skipping configuration."
 fi
 
 # Define an array of applications to install using Homebrew Cask.
 apps=(
-    "google-chrome"
-    "firefox"
-    "visual-studio-code"
-    "moom"
     "cheatsheet"
+    "claude"
+    "claude-code"
     "docker"
-    "raycast"
-    "google-drive"
-    "dropzone"
-    "gimp"
-    "zoom"
-    "vlc"
-    "steam"
-    "discord"
-    "spotify"
     "elgato-control-center"
+    "firefox"
+    "gimp"
+    "google-chrome"
+    "google-drive"
     "meetingbar"
+    "moom"
     "obsidian"
+    "raycast"
+    "spotify"
+    "steam"
+    "visual-studio-code"
+    "vlc"
 )
 
 # Loop over the array to install each application.
@@ -144,48 +128,29 @@ fi
 
 # Moom settings
 # Settings can be exported from a source machine by changing 'import' to 'export'
-defaults import com.manytricks.Moom ${HOME}/dotfiles/settings/Moom.plist
-
-# Install Source Code Pro Font
-# Tap the Homebrew font cask repository if not already tapped
-brew tap | grep -q "^homebrew/cask-fonts$" || brew tap homebrew/cask-fonts
-
-# Define the font name
-font_name="font-awesome-terminal-fonts"
-
-# Check if the font is already installed
-if brew list --cask | grep -q "^$font_name\$"; then
-    echo "$font_name is already installed. Skipping..."
-else
-    echo "Installing $font_name..."
-    brew install --cask "$font_name"
+if [ -f "${HOME}/dotfiles/settings/Moom.plist" ]; then
+    defaults import com.manytricks.Moom "${HOME}/dotfiles/settings/Moom.plist"
+    echo "Moom settings imported successfully."
 fi
 
-# Once font is installed, Import your Terminal Profile
-echo
-print -P "%F{green}Import your terminal settings...%f"
-echo "Terminal -> Settings -> Profiles -> Import..."
-echo "Import from ${HOME}/dotfiles/settings/DEC.terminal"
-echo "Press enter to continue..."
-read
+# Install fonts
+# Note: homebrew/cask-fonts tap is deprecated, fonts are now regular casks
+fonts=(
+    "font-awesome-terminal-fonts"
+)
+
+for font in "${fonts[@]}"; do
+    # Check if the font is already installed
+    if brew list --cask | grep -q "^$font\$"; then
+        echo "$font is already installed. Skipping..."
+    else
+        echo "Installing $font..."
+        brew install --cask "$font"
+    fi
+done
 
 # Update and clean up again for safe measure
 brew update
 brew upgrade
 brew upgrade --cask
 brew cleanup
-
-if [ $admin_response = 'Y' ]; then
-    echo "Use Spotlight ⌘Space, type 'Keyboard Shortcuts', go to Spotlight. Change shortcut to ⌥Space"
-    echo "Grab the Raycast Export from a private share (contains private keys, cannot be committed to repo)"
-    echo "Import Raycast Settings under Advanced Options"
-
-    echo "Sign in to Google Chrome. Press enter to continue..."
-    read
-
-    echo "Sign in to Spotify. Press enter to continue..."
-    read
-
-    echo "Sign in to Discord. Press enter to continue..."
-    read
-fi

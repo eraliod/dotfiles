@@ -5,64 +5,26 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# Path to your oh-my-zsh installation.
+###############################################################################
+# Oh My Zsh Settings
+###############################################################################
+
+# Path to oh-my-zsh installation.
 export ZSH="${HOME}/.oh-my-zsh"
 
 # Set name of the theme to load
 ZSH_THEME="powerlevel10k/powerlevel10k"
 
-# Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
-
-# Uncomment the following line to use hyphen-insensitive completion.
-# Case-sensitive completion must be off. _ and - will be interchangeable.
-# HYPHEN_INSENSITIVE="true"
-
-# Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE="true"
-
-# Uncomment the following line to automatically update without prompting.
-# DISABLE_UPDATE_PROMPT="true"
-
-# Uncomment the following line if pasting URLs and other text is messed up.
-# DISABLE_MAGIC_FUNCTIONS="true"
-
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
-
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
-
-# Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
-
 # Uncomment the following line to display red dots whilst waiting for completion.
-# Caution: this setting can cause issues with multiline prompts (zsh 5.7.1 and newer seem to work)
-# See https://github.com/ohmyzsh/ohmyzsh/issues/5765
-# COMPLETION_WAITING_DOTS="true"
+COMPLETION_WAITING_DOTS="true"
 
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# You can set one of the optional three formats:
-# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# or set a custom format using the strftime function format specifications,
-# see 'man strftime' for details.
-# HIST_STAMPS="mm/dd/yyyy"
-
-# Would you like to use another custom folder than $ZSH/custom?
+# Custom folder for oh-my-zsh plugins managed by brew
 ZSH_CUSTOM=$(brew --prefix)/share
 
 # Which plugins would you like to load?
-# Standard plugins can be found in $ZSH/plugins/
-# Custom plugins may be added to $ZSH_CUSTOM/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
 plugins=(
+	aliases
+	command-not-found
 	git
 	docker
 )
@@ -73,42 +35,88 @@ source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zs
 
 source $ZSH/oh-my-zsh.sh
 
-# User configuration
-# export MANPATH="/usr/local/man:$MANPATH"
+###############################################################################
+# PATH Updates
+###############################################################################
 
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
+# Add pixi to the path
+export PATH="$HOME/.pixi/bin:$PATH"
 
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
+###############################################################################
+# Autocompletion Settings
+###############################################################################
 
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
+# pixi
+eval "$(pixi completion --shell zsh)"
 
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
+# fzf key bindings
+eval "$(fzf --zsh)"
+
+# Terraform
+complete -o nospace -C /opt/homebrew/bin/terraform terraform
+
+# Terramate
+complete -o nospace -C /opt/homebrew/bin/terramate terramate
+
+# Terragrunt
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /opt/homebrew/bin/terragrunt terragrunt
+
+###############################################################################
+# Terramate Settings
+###############################################################################
+export TM_DISABLE_SAFEGUARDS=git-untracked,git-uncommitted,git-out-of-sync
+
+###############################################################################
+# Functions
+###############################################################################
+
+# function to easily pick aws profile from ~/.aws/config file
+ap () {
+  profile=${1:-}
+  if [[ -z "$profile" ]]
+  then
+    profile=$(aws configure list-profiles | fzf)
+  fi
+  export AWS_PROFILE="$profile"
+}
+
+# function to easily pick databricks profile from ~/.databrickscfg file
+dp () {
+  profile=${1:-}
+  if [[ -z "$profile" ]]
+  then
+    profile=$(databricks auth profiles | awk 'NR>1 {print $1}' | fzf)
+  fi
+  export DATABRICKS_CONFIG_PROFILE="$profile"
+}
+
+# function deletes all local branches not present in remote
+gbdg () {
+    git fetch -p && git branch -vv | grep ': gone]' | awk '{print $1}' | xargs -n 1 echo git branch -D
+}
+
+# function to create a uuid
+get-uuid() {
+    uuidgen | tr '[:upper:]' '[:lower:]'
+}
+
+###############################################################################
+# Powerlevel10k Configuration
+###############################################################################
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-# Load dotfiles:
-for file in ~/.{aliases,private}; do
-    [ -r "$file" ] && [ -f "$file" ] && source "$file";
-done;
-unset file;
-
-autoload -U +X bashcompinit && bashcompinit
-complete -o nospace -C /opt/homebrew/bin/terragrunt terragrunt
-
 # To customize prompt, run `p10k configure` or edit ~/dotfiles/.p10k.zsh.
 [[ ! -f ~/dotfiles/.p10k.zsh ]] || source ~/dotfiles/.p10k.zsh
+
+###############################################################################
+# Dotfiles
+###############################################################################
+for file in ~/.{private,aliases}; do
+    [ -r "$file" ] && [ -f "$file" ] && source "$file"
+done
+unset file
+
+eval $(thefuck --alias)

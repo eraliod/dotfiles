@@ -1,23 +1,34 @@
 #!/usr/bin/env zsh
 
-# Check if Homebrew's bin exists and if it's not already in the PATH
-if [ -x "/opt/homebrew/bin/brew" ]; then
-    export PATH="/opt/homebrew/bin:$PATH"
-fi
-
 # Install VS Code Extensions
 extensions=(
+    # Python
     ms-python.python
     ms-python.pylint
     ms-python.vscode-pylance
     ms-python.debugpy
-    ms-python.black-formatter
+    charliermarsh.ruff
+
+    # Formatting & Language Support
+    esbenp.prettier-vscode
+    foxundermoon.shell-format
+    tamasfe.even-better-toml
+    hashicorp.terraform
+    redhat.vscode-yaml
+
+    # Utilities
     znck.grammarly
     usernamehw.errorlens
     vscodevim.vim
     wayou.vscode-todo-highlight
-    zhuangtongfa.material-theme
     oderwat.indent-rainbow
+
+    # Git & AI Tools
+    eamodio.gitlens
+    github.copilot
+
+    # Theme
+    zhuangtongfa.material-theme
 )
 
 # The installation of extensions via script is predicated on the code cli being present
@@ -41,8 +52,6 @@ else
     echo "$extension"
     done
 fi
-echo "Press enter to continue..."
-read
 
 # Define the target directory for VS Code user settings on macOS
 VSCODE_USER_SETTINGS_DIR="${HOME}/Library/Application Support/Code/User"
@@ -60,11 +69,5 @@ else
     print -P "%F{yellow}VS Code user settings directory does not exist%f. Please ensure VS Code is installed. Or open manually if it has never been opened."
 fi
 
-# Open VS Code to sign-in to extensions
+# Open VS Code (will auto-launch in background)
 code . &>/dev/null
-echo "Login to extensions within VS Code."
-echo
-echo "use Option + Cmd + D to hide the dock"
-echo
-echo "Press enter to continue..."
-read

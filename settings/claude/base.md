@@ -219,10 +219,10 @@ We have direct access to dev and prod Postgres databases via `psql` through SSH 
 
 **Two RDS instances — port determines which:**
 
-| Instance | Port |
-|---|---|
+| Instance | Port  |
+| -------- | ----- |
 | analysis | 15434 |
-| shared | 15632 |
+| shared   | 15632 |
 
 Ask Damian which instance to query if not specified. Do NOT guess.
 

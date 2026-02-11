@@ -1,33 +1,6 @@
 {
-  "mcpServers": {
-    "claude-code": {
-      "command": "claude",
-      "args": ["mcp", "serve"],
-      "env": {}
-    },
-    "filesystem": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-filesystem",
-        "/Users/damian.eralio/"
-      ]
-    },
-    "private-journal": {
-      "command": "npx",
-      "args": ["github:obra/private-journal-mcp"]
-    },
-    "sequential-thinking": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"]
-    },
-    "time": {
-      "command": "/Users/damian.eralio/.pixi/bin/uvx",
-      "args": ["mcp-server-time", "--local-timezone=America/New_York"]
-    },
-    "git": {
-      "command": "/Users/damian.eralio/.pixi/bin/uvx",
-      "args": ["mcp-server-git"]
-    }
+  "preferences": {
+    "sidebarMode": "chat",
+    "coworkScheduledTasksEnabled": false
   }
 }

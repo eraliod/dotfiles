@@ -205,6 +205,39 @@ Do NOT add `--with pyspark`—databricks-connect bundles its own pyspark-connect
 
 **Version:** 17.2.x required—later versions don't support serverless yet.
 
+## Postgres Access
+
+We have direct access to dev and prod Postgres databases via `psql` through SSH tunnels.
+
+**Read-only** — Do NOT execute anything outside of `SELECT` without explicit permission from Damian.
+
+**Connection requires active SSH tunnels.** Damian's tunnel setup determines dev vs prod. If you get `Connection refused` on localhost, remind Damian to authenticate to the target AWS account and run the `mapdb` script.
+
+**Two RDS instances — port determines which:**
+
+| Instance | Port |
+|---|---|
+| analysis | 15434 |
+| shared | 15632 |
+
+Ask Damian which instance to query if not specified. Do NOT guess.
+
+**Invocation:**
+
+```bash
+# Dev — analysis (port 15434)
+PGPASSWORD=$RDS_PG_DEV_DOTCOM_PW psql -U $RDS_PG_DEV_DOTCOM_USER -d dot-com -p 15434 -h localhost
+
+# Dev — shared (port 15632)
+PGPASSWORD=$RDS_PG_DEV_DOTCOM_PW psql -U $RDS_PG_DEV_DOTCOM_USER -d dot-com -p 15632 -h localhost
+
+# Prod — analysis (port 15434)
+PGPASSWORD=$RDS_PG_PROD_DOTCOM_PW psql -U $RDS_PG_PROD_DOTCOM_USER -d dot-com -p 15434 -h localhost
+
+# Prod — shared (port 15632)
+PGPASSWORD=$RDS_PG_PROD_DOTCOM_PW psql -U $RDS_PG_PROD_DOTCOM_USER -d dot-com -p 15632 -h localhost
+```
+
 ## Git Workflow
 
 - **Conventional commits:** `type(scope): subject` format

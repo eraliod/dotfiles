@@ -96,14 +96,6 @@
       "__ SKILLS __",
       "Skill(*)"
     ],
-    "ask": [
-      "Bash(databricks auth token*)",
-      "mcp__databricks-dbsql-dev__execute_sql",
-      "mcp__databricks-dbsql-prod__execute_sql",
-      "mcp__databricks-dbsql-sandbox__execute_sql",
-      "mcp__databricks-dbsql-adhoc-analysis__execute_sql"
-    ],
-    "defaultMode": "acceptEdits",
     "deny": [
       "__ GIT DESTRUCTIVE __",
       "Bash(git clean -f:*)",
@@ -122,6 +114,14 @@
       "Read(~/.config/gcloud/**)",
       "Read(~/.ssh/**)"
     ],
+    "ask": [
+      "Bash(databricks auth token*)",
+      "mcp__databricks-dbsql-dev__execute_sql",
+      "mcp__databricks-dbsql-prod__execute_sql",
+      "mcp__databricks-dbsql-sandbox__execute_sql",
+      "mcp__databricks-dbsql-adhoc-analysis__execute_sql"
+    ],
+    "defaultMode": "acceptEdits",
     "disableBypassPermissionsMode": "disable"
   },
   "model": "opus",

@@ -124,6 +124,20 @@
     "defaultMode": "acceptEdits",
     "disableBypassPermissionsMode": "disable"
   },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "mcp__databricks-dbsql.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/damian.eralio/dotfiles/settings/claude/databricks-mcp-token-check.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  },
   "model": "opus",
   "enableAllProjectMcpServers": true,
   "statusLine": {

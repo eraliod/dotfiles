@@ -173,6 +173,10 @@ Upload notebooks, trigger jobs, check run status. Auth is handled automatically.
 
 Use the `databricks-dbsql` MCP tools for SQL queries. This is the default choice for data exploration.
 
+**Token expiry:** A PreToolUse hook (`databricks-mcp-token-check.sh`) monitors OAuth token age. If a Databricks MCP tool call is **blocked by this hook**, the OAuth token has expired. Tell the user:
+
+> The Databricks [PROFILE] MCP server's OAuth token has expired. Restart it via `/mcp` to get a fresh token.
+
 ### Databricks Connect (Rare - When SQL Truly Won't Work)
 
 Use databricks-connect only for operations that **cannot** be expressed in SQL:

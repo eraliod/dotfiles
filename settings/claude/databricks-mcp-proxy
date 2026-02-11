@@ -26,5 +26,9 @@ if [[ -z "$TOKEN" || "$TOKEN" == "null" ]]; then
   exit 1
 fi
 
+# Track MCP server start time for token expiry detection
+mkdir -p ~/.cache/claude
+date +%s > ~/.cache/claude/databricks-mcp-start-${PROFILE}
+
 # Start mcp-remote with dynamic credentials
 exec npx mcp-remote "${HOST}/api/2.0/mcp/sql" --header "Authorization: Bearer $TOKEN"

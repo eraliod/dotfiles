@@ -242,6 +242,17 @@ PGPASSWORD=$RDS_PG_PROD_DOTCOM_PW psql -U $RDS_PG_PROD_DOTCOM_USER -d dot-com -p
 PGPASSWORD=$RDS_PG_PROD_DOTCOM_PW psql -U $RDS_PG_PROD_DOTCOM_USER -d dot-com -p 15632 -h localhost
 ```
 
+## Excalidraw MCP
+
+When using `mcp__excalidraw__create_view`:
+
+- **Always send the full diagram.** Never use `restoreCheckpoint` — it doesn't work with the local preview system.
+- **Default font:** `fontFamily: 1` (Excalifont). Only use `fontFamily: 2` (clean sans-serif) when Damian requests "clean labels".
+- **Labels on shapes:** Use the `label` shorthand — the local preview's `expandLabels()` handles conversion. Always include `fontSize`.
+- **Standalone text:** Always provide `fontSize`. The preview's `fixStandaloneText()` will estimate `width`/`height`.
+- **Multi-line labels:** Use `\n` in label text. Works with shapes and standalone text.
+- **No checkpoints, no `restoreCheckpoint`.** Re-send the entire elements array every time.
+
 ## Git Workflow
 
 - **Conventional commits:** `type(scope): subject` format

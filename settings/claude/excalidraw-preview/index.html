@@ -62,6 +62,96 @@
       let root = null;
       let renderKey = 0;
 
+      // Fix standalone text elements that arrive with width:0, height:0 from create_view.
+      // Excalidraw won't render text with zero dimensions.
+      function fixStandaloneText(elements) {
+        return elements.map((el) => {
+          if (el.type !== "text" || el.containerId) return el;
+          if (el.width && el.height) return el;
+
+          const fontSize = el.fontSize || 20;
+          const fontFamily = el.fontFamily || 1;
+          const lineHeight = el.lineHeight || 1.25;
+          const lines = (el.text || "").split("\n");
+          const maxLineLen = Math.max(...lines.map((l) => l.length));
+
+          return {
+            ...el,
+            fontFamily: fontFamily,
+            width: maxLineLen * fontSize * 0.55,
+            height: lines.length * fontSize * lineHeight,
+            lineHeight: lineHeight,
+            originalText: el.originalText || el.text,
+            autoResize: true,
+          };
+        });
+      }
+
+      // Convert MCP label shorthand into bound text elements that Excalidraw understands.
+      // Reference: with_labels.excalidraw exported from Excalidraw after manual labeling.
+      function expandLabels(elements) {
+        const result = [];
+        for (const el of elements) {
+          if (!el.label) {
+            result.push(el);
+            continue;
+          }
+
+          const textId = el.id + "_label";
+          const fontSize = el.label.fontSize || 20;
+          const fontFamily = el.label.fontFamily || 1;
+          const lineHeight = 1.25;
+          const lines = el.label.text.split("\n");
+          const maxLineLen = Math.max(...lines.map((l) => l.length));
+          const textHeight = lines.length * fontSize * lineHeight;
+          const textWidth = maxLineLen * fontSize * 0.55;
+
+          // Parent element with boundElements reference and label removed
+          const { label, ...parent } = el;
+          const existingBound = parent.boundElements || [];
+          parent.boundElements = [
+            ...existingBound,
+            { type: "text", id: textId },
+          ];
+          result.push(parent);
+
+          // Bound text element centered in parent
+          result.push({
+            type: "text",
+            id: textId,
+            x: el.x + (el.width - textWidth) / 2,
+            y: el.y + (el.height - textHeight) / 2,
+            width: textWidth,
+            height: textHeight,
+            text: label.text,
+            originalText: label.text,
+            fontSize: fontSize,
+            fontFamily: fontFamily,
+            textAlign: "center",
+            verticalAlign: "middle",
+            containerId: el.id,
+            autoResize: true,
+            lineHeight: lineHeight,
+            strokeColor: label.strokeColor || "#1e1e1e",
+            backgroundColor: "transparent",
+            fillStyle: "solid",
+            strokeWidth: 2,
+            strokeStyle: "solid",
+            roughness: 1,
+            opacity: 100,
+            angle: 0,
+            groupIds: [],
+            frameId: null,
+            roundness: null,
+            boundElements: null,
+            isDeleted: false,
+            locked: false,
+            link: null,
+          });
+        }
+        return result;
+      }
+
       function renderDiagram(elements) {
         const status = document.getElementById("status");
         status.textContent = "Updated " + new Date().toLocaleTimeString();
@@ -75,7 +165,7 @@
         root.render(
           React.createElement(ExcalidrawLib.Excalidraw, {
             key: renderKey,
-            initialData: { elements: elements },
+            initialData: { elements: elements, appState: { theme: "dark" } },
             viewModeEnabled: true,
             zenModeEnabled: true,
             gridModeEnabled: false,
@@ -110,8 +200,9 @@
           const data = await resp.json();
 
           const elements = Array.isArray(data) ? data : data.elements || [];
+          const expanded = fixStandaloneText(expandLabels(elements));
           // Filter out pseudo-elements that Excalidraw doesn't understand
-          const filtered = elements.filter(
+          const filtered = expanded.filter(
             (el) =>
               el.type !== "cameraUpdate" &&
               el.type !== "delete" &&

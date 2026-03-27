@@ -8,12 +8,13 @@ PORT=8080
 PREVIEW_DIR="/tmp/excalidraw-preview"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
+# Always refresh HTML so edits to index.html take effect immediately
+mkdir -p "${PREVIEW_DIR}"
+cp "${SCRIPT_DIR}/index.html" "${PREVIEW_DIR}/index.html"
+
 if curl -s -o /dev/null --max-time 1 "http://127.0.0.1:${PORT}"; then
   exit 0
 fi
-
-mkdir -p "${PREVIEW_DIR}"
-cp "${SCRIPT_DIR}/index.html" "${PREVIEW_DIR}/index.html"
 
 cd "${PREVIEW_DIR}"
 nohup python3 -m http.server "${PORT}" --bind 127.0.0.1 > /dev/null 2>&1 &

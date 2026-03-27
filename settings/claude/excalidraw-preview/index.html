@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Excalidraw Live Preview</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+        background: #fff;
+        font-family: system-ui, sans-serif;
+      }
+      #status {
+        position: fixed;
+        top: 12px;
+        right: 12px;
+        z-index: 1000;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 13px;
+        background: #f0f0f0;
+        color: #666;
+        transition: all 0.3s;
+      }
+      #status.updated {
+        background: #d4edda;
+        color: #155724;
+      }
+      #status.waiting {
+        background: #fff3cd;
+        color: #856404;
+      }
+      #status.error {
+        background: #f8d7da;
+        color: #721c24;
+      }
+      #canvas {
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="status" class="waiting">Waiting for diagram...</div>
+    <div id="canvas"></div>
+
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@excalidraw/excalidraw@0.17.6/dist/excalidraw.production.min.js"></script>
+
+    <script>
+      const POLL_INTERVAL_MS = 1000;
+      const DATA_URL = "data.json";
+
+      let lastModified = null;
+      let root = null;
+      let renderKey = 0;
+
+      function renderDiagram(elements) {
+        const status = document.getElementById("status");
+        status.textContent = "Updated " + new Date().toLocaleTimeString();
+        status.className = "updated";
+
+        if (!root) {
+          root = ReactDOM.createRoot(document.getElementById("canvas"));
+        }
+
+        renderKey++;
+        root.render(
+          React.createElement(ExcalidrawLib.Excalidraw, {
+            key: renderKey,
+            initialData: { elements: elements },
+            viewModeEnabled: true,
+            zenModeEnabled: true,
+            gridModeEnabled: false,
+            UIOptions: {
+              canvasActions: { toggleTheme: true },
+            },
+          }),
+        );
+      }
+
+      async function poll() {
+        const status = document.getElementById("status");
+        try {
+          const headers = {};
+          if (lastModified) {
+            headers["If-Modified-Since"] = lastModified;
+          }
+
+          const resp = await fetch(DATA_URL, { headers, cache: "no-store" });
+
+          if (resp.status === 304) return;
+          if (!resp.ok) {
+            if (resp.status === 404) {
+              status.textContent = "Waiting for diagram...";
+              status.className = "waiting";
+              return;
+            }
+            throw new Error(`HTTP ${resp.status}`);
+          }
+
+          lastModified = resp.headers.get("Last-Modified");
+          const data = await resp.json();
+
+          const elements = Array.isArray(data) ? data : data.elements || [];
+          // Filter out pseudo-elements that Excalidraw doesn't understand
+          const filtered = elements.filter(
+            (el) =>
+              el.type !== "cameraUpdate" &&
+              el.type !== "delete" &&
+              el.type !== "restoreCheckpoint",
+          );
+
+          renderDiagram(filtered);
+        } catch (err) {
+          if (err.name !== "TypeError") {
+            status.textContent = "Error: " + err.message;
+            status.className = "error";
+          }
+        }
+      }
+
+      setInterval(poll, POLL_INTERVAL_MS);
+      poll();
+    </script>
+  </body>
+</html>

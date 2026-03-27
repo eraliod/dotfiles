@@ -76,6 +76,8 @@ claude mcp add --scope user filesystem -- npx -y @modelcontextprotocol/server-fi
 claude mcp add --scope user private-journal -- npx github:obra/private-journal-mcp
 claude mcp add --scope user sequential-thinking -- npx -y @modelcontextprotocol/server-sequential-thinking
 
+claude mcp add --transport http --scope user excalidraw https://mcp.excalidraw.com/mcp
+
 # Add uvx-based MCP servers (uvx comes with pixi)
 claude mcp add --scope user time -- uvx mcp-server-time
 claude mcp add --scope user git -- uvx mcp-server-git

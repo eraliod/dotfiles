@@ -40,7 +40,6 @@ packages=(
     "bash"
     "duckdb"
     "git"
-    "pixi"
     "powerlevel10k"
     "python"
     "terramate"

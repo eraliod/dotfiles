@@ -93,4 +93,11 @@ claude mcp add --scope user databricks-dbsql-sandbox -- "${CLAUDE_SETTINGS_DIR}/
 claude mcp add --scope user databricks-dbsql-adhoc-analysis -- "${CLAUDE_SETTINGS_DIR}/databricks-mcp-proxy" ADHOC-ANALYSIS
 echo "Databricks DBSQL MCP servers added successfully."
 
+# Add Redshift MCP servers (AWS SSO auth via env vars)
+echo "Adding Redshift MCP servers..."
+claude mcp add --scope user redshift-legacy -e AWS_PROFILE=legacy -e AWS_REGION=us-east-1 -- uvx awslabs.redshift-mcp-server@latest
+claude mcp add --scope user redshift-analytics-dev -e AWS_PROFILE=analytics-dev -e AWS_REGION=us-east-2 -- uvx awslabs.redshift-mcp-server@latest
+claude mcp add --scope user redshift-analytics-prod -e AWS_PROFILE=analytics-prod -e AWS_REGION=us-east-2 -- uvx awslabs.redshift-mcp-server@latest
+echo "Redshift MCP servers added successfully."
+
 echo "Claude configuration setup complete!"

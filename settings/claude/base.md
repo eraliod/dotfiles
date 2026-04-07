@@ -65,6 +65,17 @@ fd . directory/
 - **YAML/XML:** `yq` (via Bash tool)
 - **Text filtering:** `rg` (via Bash tool)
 
+### SQL Linting
+
+**REQUIRED:** `uvx sqruff fix <absolute_path>` (via Bash tool)
+
+- Always use **absolute paths** — sqruff panics on relative paths
+- This runs sqruff with auto-fix enabled
+
+```bash
+uvx sqruff fix /absolute/path/to/file.sql
+```
+
 ## Pre-commit Hooks (Enforced by Git Workflow)
 
 YOU MUST NEVER bypass pre-commit hooks. No exceptions.

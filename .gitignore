@@ -25,3 +25,6 @@ node_modules/
 
 # Archived bash files (work in progress)
 _bash_archive/
+
+# install.sh --force backup directory (timestamped backups of replaced files)
+.backup/

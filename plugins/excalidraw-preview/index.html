@@ -88,7 +88,9 @@
       }
 
       // Convert MCP label shorthand into bound text elements that Excalidraw understands.
-      // Reference: with_labels.excalidraw exported from Excalidraw after manual labeling.
+      // Accepts label as an object ({text, fontSize, fontFamily, strokeColor}) or as a
+      // plain string (shorthand for {text: "..."}). Reference: with_labels.excalidraw
+      // exported from Excalidraw after manual labeling.
       function expandLabels(elements) {
         const result = [];
         for (const el of elements) {
@@ -97,17 +99,22 @@
             continue;
           }
 
-          const textId = el.id + "_label";
-          const fontSize = el.label.fontSize || 20;
-          const fontFamily = el.label.fontFamily || 1;
+          const labelObj =
+            typeof el.label === "string" ? { text: el.label } : el.label;
+          const parentId =
+            el.id || `el_${Math.random().toString(36).slice(2, 10)}`;
+          const textId = parentId + "_label";
+          const fontSize = labelObj.fontSize || 20;
+          const fontFamily = labelObj.fontFamily || 1;
           const lineHeight = 1.25;
-          const lines = el.label.text.split("\n");
+          const lines = (labelObj.text || "").split("\n");
           const maxLineLen = Math.max(...lines.map((l) => l.length));
           const textHeight = lines.length * fontSize * lineHeight;
           const textWidth = maxLineLen * fontSize * 0.55;
 
           // Parent element with boundElements reference and label removed
           const { label, ...parent } = el;
+          parent.id = parentId;
           const existingBound = parent.boundElements || [];
           parent.boundElements = [
             ...existingBound,
@@ -123,16 +130,16 @@
             y: el.y + (el.height - textHeight) / 2,
             width: textWidth,
             height: textHeight,
-            text: label.text,
-            originalText: label.text,
+            text: labelObj.text,
+            originalText: labelObj.text,
             fontSize: fontSize,
             fontFamily: fontFamily,
             textAlign: "center",
             verticalAlign: "middle",
-            containerId: el.id,
+            containerId: parentId,
             autoResize: true,
             lineHeight: lineHeight,
-            strokeColor: label.strokeColor || "#1e1e1e",
+            strokeColor: labelObj.strokeColor || "#1e1e1e",
             backgroundColor: "transparent",
             fillStyle: "solid",
             strokeWidth: 2,
@@ -211,10 +218,9 @@
 
           renderDiagram(filtered);
         } catch (err) {
-          if (err.name !== "TypeError") {
-            status.textContent = "Error: " + err.message;
-            status.className = "error";
-          }
+          status.textContent = "Error: " + err.message;
+          status.className = "error";
+          console.error("Excalidraw preview poll error:", err);
         }
       }
 

@@ -1,0 +1,28 @@
+{
+  "mcpServers": {
+    "redshift-legacy": {
+      "command": "uvx",
+      "args": ["awslabs.redshift-mcp-server@latest"],
+      "env": {
+        "AWS_PROFILE": "legacy",
+        "AWS_REGION": "us-east-1"
+      }
+    },
+    "redshift-analytics-dev": {
+      "command": "uvx",
+      "args": ["awslabs.redshift-mcp-server@latest"],
+      "env": {
+        "AWS_PROFILE": "analytics-dev",
+        "AWS_REGION": "us-east-2"
+      }
+    },
+    "redshift-analytics-prod": {
+      "command": "uvx",
+      "args": ["awslabs.redshift-mcp-server@latest"],
+      "env": {
+        "AWS_PROFILE": "analytics-prod",
+        "AWS_REGION": "us-east-2"
+      }
+    }
+  }
+}

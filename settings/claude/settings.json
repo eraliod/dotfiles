@@ -176,6 +176,7 @@
     "episodic-memory@superpowers-marketplace": true,
     "superpowers-lab@superpowers-marketplace": true,
     "atlassian-toolkit@kin-claude-plugins": true,
+    "readme-forge@kin-claude-plugins": true,
     "code-review@claude-plugins-official": true,
     "code-simplifier@claude-plugins-official": true,
     "commit-commands@claude-plugins-official": true,
@@ -193,7 +194,8 @@
     "claude-md-management@claude-plugins-official": true,
     "claude-code-setup@claude-plugins-official": true,
     "terraform-ls@kin-claude-plugins": true,
-    "learning-output-style@claude-plugins-official": true
+    "learning-output-style@claude-plugins-official": true,
+    "skill-creator@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "superpowers-marketplace": {

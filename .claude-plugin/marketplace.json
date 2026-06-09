@@ -1,0 +1,26 @@
+{
+  "name": "dotfile-plugins",
+  "owner": {
+    "name": "Damian Eralio"
+  },
+  "metadata": {
+    "description": "Personal Claude Code plugins for Damian's dotfiles"
+  },
+  "plugins": [
+    {
+      "name": "excalidraw-preview",
+      "source": "./plugins/excalidraw-preview",
+      "description": "Local browser preview for Excalidraw MCP diagrams"
+    },
+    {
+      "name": "redshift-mcp",
+      "source": "./plugins/redshift-mcp",
+      "description": "Redshift MCP servers for legacy and analytics dev/prod workspaces"
+    },
+    {
+      "name": "databricks-mcp-custom",
+      "source": "./plugins/databricks-mcp-custom",
+      "description": "Personal Databricks MCP profiles with OAuth token expiry check"
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+# Brewfile - managed by `brew bundle`
+# Install: brew bundle --file=packages/Brewfile
+# Update:  brew bundle dump --file=packages/Brewfile --force
+#
+# Note: awscli, fzf, go, tree, and other CLI tools are managed by pixi
+# (see stow/pixi/.pixi/manifests/pixi-global.toml)
+
+# CLI tools
+brew "bash"
+brew "duckdb"
+brew "git"
+brew "powerlevel10k"
+brew "python"
+brew "stow"
+brew "terramate"
+brew "thefuck"
+brew "wget"
+brew "zsh"
+brew "zsh-autosuggestions"
+brew "zsh-syntax-highlighting"
+
+# GUI applications
+cask "cheatsheet"
+cask "claude"
+cask "claude-code"
+cask "docker"
+cask "elgato-control-center"
+cask "firefox"
+cask "gimp"
+cask "google-chrome"
+cask "google-drive"
+cask "meetingbar"
+cask "moom"
+cask "obsidian"
+cask "raycast"
+cask "spotify"
+cask "steam"
+cask "visual-studio-code"
+cask "vlc"
+
+# Fonts
+cask "font-awesome-terminal-fonts"

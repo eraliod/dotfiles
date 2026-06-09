@@ -1,0 +1,5 @@
+{
+  "name": "databricks-mcp-custom",
+  "version": "0.1.0",
+  "description": "Personal Databricks MCP profiles with OAuth token expiry check"
+}

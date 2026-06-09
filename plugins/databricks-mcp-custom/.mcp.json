@@ -1,0 +1,20 @@
+{
+  "mcpServers": {
+    "databricks-dbsql-dev": {
+      "command": "${CLAUDE_PLUGIN_ROOT}/databricks-mcp-proxy",
+      "args": ["DEV"]
+    },
+    "databricks-dbsql-prod": {
+      "command": "${CLAUDE_PLUGIN_ROOT}/databricks-mcp-proxy",
+      "args": ["PROD"]
+    },
+    "databricks-dbsql-sandbox": {
+      "command": "${CLAUDE_PLUGIN_ROOT}/databricks-mcp-proxy",
+      "args": ["SANDBOX"]
+    },
+    "databricks-dbsql-adhoc-analysis": {
+      "command": "${CLAUDE_PLUGIN_ROOT}/databricks-mcp-proxy",
+      "args": ["ADHOC-ANALYSIS"]
+    }
+  }
+}

@@ -2,7 +2,7 @@
 
 ## Imports
 
-- @~/dotfiles/settings/claude/base.md
+- @~/.claude/base.md
 
 ## Skills-First Workflow (MANDATORY)
 

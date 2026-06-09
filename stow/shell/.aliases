@@ -1,0 +1,65 @@
+# Shortcuts
+alias ch='history | grep "git commit"'
+alias hg='history | grep'
+alias python=python3
+alias pip=pip3
+
+# Drop-in Replacements
+alias cat=bat
+
+# Get OS X Software Updates
+alias update_system='sudo softwareupdate -i -a'
+
+# Update/upgrade Homebrew and their installed packages
+alias update_brew='brew update; brew upgrade; brew upgrade --cask; brew cleanup'
+
+# empty downloads and trash folders
+alias clean='rm -rf ~/.Trash/*; rm -rf ~/Downloads/*'
+
+# add Github key back onto keychain
+alias gitkeyfix='ssh-add ~/.ssh/github_personal'
+
+# Terramate
+alias trc='terramate run --changed'
+alias trci='terramate run --changed terraform init'
+alias trcp='terramate run --changed terraform plan --out plan.tfplan'
+alias trca='terramate run --changed terraform apply plan.tfplan'
+
+###############################################################################
+# Functions
+###############################################################################
+
+# AWS CLI Profile Selector
+ap() {
+    profile=${1:-}
+    if [[ -z "$profile" ]]; then
+        profile=$(aws configure list-profiles | fzf)
+    fi
+    export AWS_PROFILE="$profile"
+}
+
+# Databricks CLI Profile Selector
+dp() {
+    profile=${1:-}
+    if [[ -z "$profile" ]]; then
+        profile=$(databricks auth profiles | awk 'NR>1 {print $1}' | fzf)
+    fi
+    export DATABRICKS_CONFIG_PROFILE="$profile"
+}
+
+# Dry-run preview of branches that would be deleted (echoes commands; safe)
+gbdg() {
+    git fetch -p && git branch -vv | grep ': gone]' | awk '{print $1}' | xargs -n 1 echo git branch -D
+}
+
+# Switch to main, pull, then delete branches whose remotes are gone (executes)
+gbda() {
+    git switch main
+    git pull
+    git fetch -p && git branch -vv | grep ': gone]' | awk '{print $1}' | xargs git branch -D
+}
+
+# Create a lowercase uuid
+get-uuid() {
+    uuidgen | tr '[:upper:]' '[:lower:]'
+}

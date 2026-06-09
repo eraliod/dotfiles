@@ -49,6 +49,9 @@ export PATH="$HOME/.pixi/bin:$PATH"
 # pixi
 eval "$(pixi completion --shell zsh)"
 
+# uv
+eval "$(uv generate-shell-completion zsh)"
+
 # fzf key bindings
 eval "$(fzf --zsh)"
 
@@ -68,40 +71,6 @@ complete -o nospace -C /opt/homebrew/bin/terragrunt terragrunt
 export TM_DISABLE_SAFEGUARDS=git-untracked,git-uncommitted,git-out-of-sync
 
 ###############################################################################
-# Functions
-###############################################################################
-
-# function to easily pick aws profile from ~/.aws/config file
-ap () {
-  profile=${1:-}
-  if [[ -z "$profile" ]]
-  then
-    profile=$(aws configure list-profiles | fzf)
-  fi
-  export AWS_PROFILE="$profile"
-}
-
-# function to easily pick databricks profile from ~/.databrickscfg file
-dp () {
-  profile=${1:-}
-  if [[ -z "$profile" ]]
-  then
-    profile=$(databricks auth profiles | awk 'NR>1 {print $1}' | fzf)
-  fi
-  export DATABRICKS_CONFIG_PROFILE="$profile"
-}
-
-# function deletes all local branches not present in remote
-gbdg () {
-    git fetch -p && git branch -vv | grep ': gone]' | awk '{print $1}' | xargs -n 1 echo git branch -D
-}
-
-# function to create a uuid
-get-uuid() {
-    uuidgen | tr '[:upper:]' '[:lower:]'
-}
-
-###############################################################################
 # Powerlevel10k Configuration
 ###############################################################################
 
@@ -114,7 +83,7 @@ get-uuid() {
 ###############################################################################
 # Dotfiles
 ###############################################################################
-for file in ~/.{private,aliases}; do
+for file in ~/.{aliases,private}; do
     [ -r "$file" ] && [ -f "$file" ] && source "$file"
 done
 unset file

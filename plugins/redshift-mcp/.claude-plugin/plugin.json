@@ -1,0 +1,5 @@
+{
+  "name": "redshift-mcp",
+  "version": "0.1.0",
+  "description": "Redshift MCP servers for legacy and analytics dev/prod workspaces"
+}

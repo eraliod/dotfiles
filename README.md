@@ -1,183 +1,151 @@
-# Development Environment Setup
+# Damian's Dotfiles
 
-This repository contains scripts and configuration files to set up a development environment for macOS. It's tailored for software development, focusing on a clean, minimal, and efficient setup.
-I forked this idea from Corey Schafer, who has a great instructional YouTube Channel. He originally took configurations from Mathias Bynens.
+Personal macOS development environment. Uses [GNU Stow](https://www.gnu.org/software/stow/) for symlink management, [pixi](https://pixi.sh) for CLI tools, and [Homebrew](https://brew.sh) for macOS apps. Bundles a personal Claude Code plugin marketplace (`dotfile-plugins`) for MCP servers and hooks.
 
-## Overview
+Structure mirrors the Kin data team's [data-dotfiles](https://github.com/kin/data-dotfiles) — see [Personal divergences](#personal-divergences) for where this repo deliberately differs.
 
-The setup includes automated scripts for installing essential software, configuring the Zsh shell, setting up Visual Studio Code, Claude Desktop & Claude Code CLI, and configuring a comprehensive development environment with pixi global tools. This guide will help you replicate my development environment on your machine if you desire to do so.
+## Quick Start (Fresh Machine)
 
-The zsh shell is set up as the default shell in the machine. It is augmented with oh-my-zsh, powerlevel10k theme, and the autosuggestions and syntax-highlighting plugins. This also requires a custom font for icons which will be downloaded by the scripts [Font Awesome terminal fonts](https://github.com/Homebrew/homebrew-cask-fonts/blob/master/Casks/font-awesome-terminal-fonts.rb)
+```bash
+git clone https://github.com/eraliod/dotfiles ~/dotfiles
+cd ~/dotfiles && ./install.sh
+```
 
-## Important Note Before Installation
+You'll be prompted for your password and git credentials along the way. Restart your terminal when the installer finishes.
 
-**WARNING:** The configurations and scripts in this repository are **HIGHLY PERSONALIZED** to my own preferences and workflows. If you decide to use them, please be aware that they will **MODIFY** your current system, potentially making some changes that are **IRREVERSIBLE** without a fresh installation of your operating system.
+## Already Have an Existing Setup?
 
-Furthermore, while I strive to backup files wherever possible, I cannot guarantee that all files are backed up. The backup mechanism is designed to backup SOME files **ONCE**. If the script is run more than once, the initial backups will be **OVERWRITTEN**, potentially resulting in loss of data. While I could implement timestamped backups to preserve multiple versions, this setup is optimized for my personal use, and a single backup suffices for me.
+Use **adopt mode** to pull your current configs into the repo, then diff against the baseline:
 
-If you would like a development environment similar to mine, I highly encourage you to fork this repository and make your own personalized changes to these scripts instead of running them exactly as I have them written for myself.
+```bash
+cd ~/dotfiles && ./install.sh --adopt
+git diff
+```
 
-If you choose to run these scripts, please do so with **EXTREME CAUTION**. It's recommended to review the scripts and understand the changes they will make to your system before proceeding.
+From there, either accept the repo defaults (`git checkout -- .`) or commit your local additions to a branch.
 
-By using these scripts, you acknowledge and accept the risk of potential data loss or system alteration. Proceed at your own risk.
+Use **force mode** to reset to the repo baseline (existing files get backed up to `.backup/<timestamp>/`):
 
-## Getting Started
+```bash
+./install.sh --force
+```
 
-### Prerequisites
+## What Gets Installed
 
-- macOS (The scripts are tailored for macOS)
-- Administrator rights (optional, but required for full installation)
+- **Homebrew** — formulae, casks, and fonts (see `packages/Brewfile`)
+- **Oh My Zsh** — with [Powerlevel10k](https://github.com/romkatv/powerlevel10k) theme
+- **pixi** — global CLI tools (see `stow/pixi/.pixi/manifests/pixi-global.toml`), including `awscli`
+- **Shell config** — zsh with autocompletions, aliases, helper functions (`ap`, `dp`, `gbdg`, `gbda`, `get-uuid`)
+- **VS Code** — settings and extensions
+- **Claude Code** — settings, statusline, and the `dotfile-plugins` marketplace
 
-### Installation
+## Claude Code
 
-1. Clone the repository to your local machine:
-   ```sh
-   git clone https://github.com/eraliod/dotfiles.git ~/dotfiles
-   ```
-2. Navigate to the `dotfiles` directory:
-   ```sh
-   cd ~/dotfiles
-   ```
-3. Here you should definitely take the time to comment out any of the applications inside brew.sh that you do not want
-4. Run the installation script:
-   ```sh
-   ./install.sh
-   ```
+The installer enables the personal `dotfile-plugins` marketplace, which currently exposes three plugins:
 
-The installation script will guide you through the process, asking about administrator rights and running the following scripts in sequence:
+| Plugin                  | What it does                                                                              |
+| ----------------------- | ----------------------------------------------------------------------------------------- |
+| `excalidraw-preview`    | Local browser preview server for Excalidraw MCP diagrams; PostToolUse writes updates live |
+| `redshift-mcp`          | Declarative MCP servers for `redshift-legacy`, `redshift-analytics-dev`, `-prod`          |
+| `databricks-mcp-custom` | Personal Databricks MCP profiles + OAuth token expiry check via PreToolUse hook           |
 
-### Installation Scripts
+Plugins are referenced from `stow/claude/.claude/settings.json` (`enabledPlugins` and `extraKnownMarketplaces`). Stow symlinks that file to `~/.claude/settings.json` so Claude Code finds them automatically.
 
-The installation is broken down into modular scripts that run in the following order:
+### Post-install: existing user-scope MCP entries
 
-1. **macOS.sh**: Installs Xcode Command Line Tools and configures macOS settings (dock, etc.)
-2. **brew.sh**: Installs Homebrew, packages (formulae), applications (casks), and fonts. Also configures the default shell to Homebrew's zsh and imports application settings (Moom, Terminal profile)
-3. **pixi.sh**: Configures pixi global environment by symlinking `pixi-global.toml` and running `pixi global sync`
-4. **git.sh**: Configures git with user credentials, enhanced diff tools (difftastic), and pre-commit hooks
-5. **ohmyzsh.sh**: Installs Oh-My-Zsh if not already present
-6. **vscode.sh**: Installs VS Code extensions and imports settings
-7. **claude.sh**: Configures Claude Desktop, Claude Code CLI, and VSCode Copilot instructions
-8. **Symlink creation**: Creates symlinks for dotfiles (`.zshrc`, `.zprofile`, `.aliases`, `.private`, `.p10k.zsh`)
+If you previously used the old imperative `claude mcp add` flow for Databricks or Redshift servers, those entries still live in `~/.claude.json`. Remove them so the plugin versions take effect:
 
-### Pixi Global Environment
+```bash
+claude mcp remove redshift-legacy
+claude mcp remove redshift-analytics-dev
+claude mcp remove redshift-analytics-prod
+claude mcp remove databricks-dbsql-dev
+claude mcp remove databricks-dbsql-prod
+claude mcp remove databricks-dbsql-sandbox
+claude mcp remove databricks-dbsql-adhoc-analysis
+```
 
-A comprehensive set of development tools installed via pixi (see `settings/pixi-global.toml`):
+### Post-install: Databricks auth
 
-### Git Enhancements
+The Databricks proxy fetches a fresh OAuth token on each MCP server start via `databricks auth token`. If you see auth errors, run `databricks auth login --profile <PROFILE>` and then `/mcp` in Claude Code to restart the server.
 
-- **difftastic**: Enhanced diff tool with syntax-aware diffs
-- **pre-commit**: Automatically enabled on cloned repos via git template directory
-- **autoSetupRemote**: Automatically sets up remote tracking branches
+## Personal Divergences
 
-### Claude Configuration
+This repo deliberately diverges from data-dotfiles in a few places:
 
-- Claude Desktop configuration synced from `settings/claude/`
-- Claude Code CLI settings synced from `settings/claude/`
-- VSCode Copilot instructions
+| Concern                  | Team default                           | This repo                                               |
+| ------------------------ | -------------------------------------- | ------------------------------------------------------- |
+| AWS CLI                  | `brew "awscli"` in Brewfile            | In `stow/pixi/.pixi/manifests/pixi-global.toml`         |
+| Statusline               | Separate `statusline-command.sh` file  | Inline one-liner in `stow/claude/.claude/settings.json` |
+| Shell theme              | Spaceship                              | Powerlevel10k                                           |
+| Claude permissions/hooks | Team defaults                          | Personal set (see follow-ups)                           |
+| AWS config               | Tracked, with `*-readonly` SSO pattern | Not tracked yet (see follow-ups)                        |
+| `.zprofile`              | Team version                           | Identical                                               |
 
-## Configuration Files
+## Stow Packages
 
-- `.zshrc`: Zsh shell configuration with oh-my-zsh, plugins, PATH updates, completions, and custom functions
-- `.zprofile`: Initializes Homebrew shell environment
-- `.aliases`: Aliases for common commands
-- `.private`: Local file for private information (not tracked in git)
-- `.p10k.zsh`: Powerlevel10k theme configuration
-- `settings/`: Directory containing settings for VS Code, Moom, Terminal, Claude, pixi global environment, etc.
+| Package       | Stows to...                                                        |
+| ------------- | ------------------------------------------------------------------ |
+| `stow/shell`  | `~/.zshrc`, `~/.aliases`, `~/.zprofile`, `~/.p10k.zsh`             |
+| `stow/claude` | `~/.claude/{settings.json,CLAUDE.md,base.md,jira_instructions.md}` |
+| `stow/pixi`   | `~/.pixi/manifests/pixi-global.toml`                               |
+| `stow/vscode` | `~/Library/Application Support/Code/User/settings.json`            |
 
-## Customizing Your Setup
+`stow/aws` and `stow/databricks` are not populated by default. To adopt your existing `~/.aws/config` and `~/.databrickscfg`:
 
-You're encouraged to modify the scripts and configuration files to suit your preferences. Here are some tips for customization:
+```bash
+mkdir -p stow/aws/.aws stow/databricks
+./install.sh --adopt
+git diff   # review what got pulled in
+```
 
-### Key Files to Customize
+## Manually-Managed Configs
 
-- **brew.sh**: Edit the `packages` and `apps` arrays to add/remove formulae and casks
-- **settings/pixi-global.toml**: Add or remove global development tools managed by pixi
-- **settings/VSCode-Settings.json**: Customize VS Code editor preferences
-- **settings/claude/**: Customize Claude Desktop, Claude Code, and Copilot configurations
-- **.zshrc**: Add custom shell configurations, functions, or aliases
-- **.aliases**: Add your own command aliases
+Files in `settings/` are imported by setup scripts rather than stowed:
 
-## Features
+- `settings/DEC.terminal` — Terminal.app profile (set as default manually)
+- `settings/Moom.plist` — Moom window manager settings (imported by `scripts/setup/macOS.sh`)
+- `settings/claude_desktop_config.json` — Claude Desktop MCP config (not used by Claude Code; restore manually if needed)
 
-### Admin Rights Handling
+## Secrets
 
-The installation script detects whether you have administrator rights and adapts accordingly:
+The installer creates `stow/shell/.private` on first run (gitignored, stowed to `~/.private`, sourced by `.zshrc`). Put API keys, tokens, etc. there:
 
-- With admin rights: Full installation including apps and system modifications
-- Without admin rights: Configuration-only mode (requires pre-installed tools)
+```bash
+# ~/.private
+export MY_API_TOKEN="..."
+```
 
-### Idempotent Scripts
+## Staying Up to Date
 
-Most scripts are designed to be run multiple times safely:
+```bash
+cd ~/dotfiles && git pull
+./install.sh --stow-only   # apply config changes
+pixi global sync           # pick up pixi tool version changes
+```
 
-- Checks for existing installations before installing
-- Preserves existing git configuration (name/email)
-- Creates backups before overwriting files
+If config files are removed from the repo, stow won't clean up the old symlinks — delete dangling symlinks in `~/` manually.
 
 ## Post-Installation Manual Steps
 
-After running `install.sh`, complete these manual configuration steps:
+1. Restart your terminal (or `source ~/.zshrc`)
+2. Set Terminal default profile from `settings/DEC.terminal`
+3. Configure Raycast keyboard shortcut (`⌘Space`)
+4. Sign in to VS Code extensions (Copilot, GitLens, etc.)
+5. (Optional) Adopt `~/.aws/config` and `~/.databrickscfg` via `./install.sh --adopt`
+6. Remove stale user-scope MCP entries (see [Claude Code](#claude-code) section)
 
-### 1. Terminal Profile
+## Follow-ups (Tracked Improvements)
 
-- Open Terminal.app
-- Go to Terminal → Settings → Profiles
-- Import the profile: `~/dotfiles/settings/DEC.terminal`
-- Set it as the default profile
-
-### 2. Raycast Configuration
-
-- Open System Settings → Keyboard → Keyboard Shortcuts → Spotlight
-- Change Spotlight shortcut from `⌘Space` to `⌥Space`
-- Launch Raycast and set its shortcut to `⌘Space`
-- Import Raycast settings from your private backup (contains API keys)
-  - Raycast → Settings → Advanced → Import Settings
-
-### 3. VS Code Extensions Login
-
-- Open VS Code (should auto-launch from `vscode.sh`)
-- Sign in to extensions that require authentication:
-  - GitHub Copilot
-  - GitLens (optional)
-  - Grammarly (optional)
-
-### 4. Restart Claude Desktop
-
-After the installation completes, **restart Claude Desktop** for the MCP servers to be recognized. The MCP servers are installed automatically by `claude.sh`, but Claude Desktop needs to be restarted to detect them.
-
-You can verify MCP servers are connected by opening Claude Desktop → Settings → MCP Servers.
-
-### 5. Verify Installation
-
-Run these commands to verify everything is set up correctly:
-
-```bash
-# Check shell
-echo $SHELL  # Should be /opt/homebrew/bin/zsh
-
-# Check git config
-git config --global --get push.autoSetupRemote  # Should be "true"
-git config --global --get init.defaultBranch     # Should be "main"
-
-# Check pixi global tools
-pixi global list
-
-# Check Claude settings
-cat ~/.claude/settings.json | jq '.model'  # Should be "opus"
-
-# Check Claude Desktop MCP servers (after restart)
-# Open Claude Desktop and verify MCP servers are connected in settings
-```
-
-## Contributing
-
-Feel free to fork this repository and customize it for your setup. Pull requests for improvements and bug fixes are welcome, but as said above, I likely won't accept pull requests that simply add additional brew installations or change some settings unless they align with my personal preferences.
+1. **Merge team Claude permissions/hooks** into `settings.json` instead of carrying personal set unchanged
+2. **AWS readonly profile pattern** — adopt the team idea of paired profiles (`analytics-dev` for CLI, `analytics-dev-readonly` for Claude) to limit Claude to read-only AWS via SSO
+3. **`DATABRICKS_CLI_PATH` workaround** — team exports this to bypass SDK rejection of pixi's trampoline binary; investigate whether needed here
+4. **Stow `claude_desktop_config.json`** if Claude Desktop integration is wanted back
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT — see [LICENSE](LICENSE).
 
 ## Acknowledgments
 
-- I forked this from [Corey Schafer's dotfiles](https://github.com/CoreyMSchafer/dotfiles), who originally forked this from [Mathias Bynens' dotfiles](https://github.com/mathiasbynens/dotfiles). And I recently added recommendations from [Jacob Hurlburt's dotfiles](https://github.com/jthurlburt/dotfiles)
-- Thanks to all the open-source projects used in this setup.
+Originally forked from [Corey Schafer's dotfiles](https://github.com/CoreyMSchafer/dotfiles), who forked from [Mathias Bynens' dotfiles](https://github.com/mathiasbynens/dotfiles). Structure adopted from the Kin data team's [data-dotfiles](https://github.com/kin/data-dotfiles).

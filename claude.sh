@@ -85,13 +85,5 @@ claude mcp add --scope user git -- uvx mcp-server-git
 echo "Claude Code MCP servers added successfully."
 echo "Note: Restart Claude Desktop for MCP servers to be recognized."
 
-# Add Databricks MCP servers (using proxy for dynamic OAuth tokens)
-echo "Adding Databricks DBSQL MCP servers..."
-claude mcp add --scope user databricks-dbsql-dev -- "${CLAUDE_SETTINGS_DIR}/databricks-mcp-proxy" DEV
-claude mcp add --scope user databricks-dbsql-prod -- "${CLAUDE_SETTINGS_DIR}/databricks-mcp-proxy" PROD
-claude mcp add --scope user databricks-dbsql-sandbox -- "${CLAUDE_SETTINGS_DIR}/databricks-mcp-proxy" SANDBOX
-claude mcp add --scope user databricks-dbsql-adhoc-analysis -- "${CLAUDE_SETTINGS_DIR}/databricks-mcp-proxy" ADHOC-ANALYSIS
-echo "Databricks DBSQL MCP servers added successfully."
-
 echo "Claude configuration setup complete!"
-echo "Note: Redshift MCP servers are now provided by the redshift-mcp plugin (dotfile-plugins marketplace)."
+echo "Note: Databricks and Redshift MCP servers are now provided by plugins (dotfile-plugins marketplace)."

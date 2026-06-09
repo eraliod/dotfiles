@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "mcp__databricks-dbsql.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/databricks-mcp-token-check.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}

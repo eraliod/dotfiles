@@ -10,11 +10,26 @@ PROFILE="${1:?Usage: databricks-mcp-proxy <PROFILE>}"
 # Clear env vars that could override profile settings
 unset DATABRICKS_HOST DATABRICKS_TOKEN
 
+# Pre-check: confirm the profile exists and has a valid OAuth session.
+# `databricks auth profiles -o json` reports valid=true/false per profile;
+# any other state (missing profile, missing CLI) means we can't authenticate.
+PROFILE_VALID=$(databricks auth profiles -o json 2>/dev/null | jq -r --arg name "$PROFILE" '.profiles[] | select(.name==$name) | .valid')
+
+if [[ "$PROFILE_VALID" != "true" ]]; then
+  if [[ -z "$PROFILE_VALID" ]]; then
+    echo "Error: Databricks profile '$PROFILE' not found in ~/.databrickscfg" >&2
+  else
+    echo "Error: Databricks profile '$PROFILE' is not authenticated (valid: false)" >&2
+  fi
+  echo "Fix: databricks auth login -p $PROFILE" >&2
+  exit 1
+fi
+
 # Get workspace host from Databricks CLI config
 HOST=$(databricks auth describe --profile "$PROFILE" -o json 2>/dev/null | jq -r '.details.configuration.host.value')
 if [[ -z "$HOST" || "$HOST" == "null" ]]; then
   echo "Error: Could not determine host for profile: $PROFILE" >&2
-  echo "Run 'databricks auth login --profile $PROFILE' first" >&2
+  echo "Fix: databricks auth login -p $PROFILE" >&2
   exit 1
 fi
 
@@ -22,7 +37,7 @@ fi
 TOKEN=$(databricks auth token --profile "$PROFILE" 2>/dev/null | jq -r '.access_token')
 if [[ -z "$TOKEN" || "$TOKEN" == "null" ]]; then
   echo "Error: Could not get token for profile: $PROFILE" >&2
-  echo "Run 'databricks auth login --profile $PROFILE' first" >&2
+  echo "Fix: databricks auth login -p $PROFILE" >&2
   exit 1
 fi
 

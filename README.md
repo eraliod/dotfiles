@@ -105,7 +105,6 @@ Files in `settings/` are imported by setup scripts rather than stowed:
 
 - `settings/DEC.terminal` — Terminal.app profile (set as default manually)
 - `settings/Moom.plist` — Moom window manager settings (imported by `scripts/setup/macOS.sh`)
-- `settings/claude_desktop_config.json` — Claude Desktop MCP config (not used by Claude Code; restore manually if needed)
 
 ## Secrets
 
@@ -134,13 +133,6 @@ If config files are removed from the repo, stow won't clean up the old symlinks 
 4. Sign in to VS Code extensions (Copilot, GitLens, etc.)
 5. (Optional) Adopt `~/.aws/config` and `~/.databrickscfg` via `./install.sh --adopt`
 6. Remove stale user-scope MCP entries (see [Claude Code](#claude-code) section)
-
-## Follow-ups (Tracked Improvements)
-
-1. **Merge team Claude permissions/hooks** into `settings.json` instead of carrying personal set unchanged
-2. **AWS readonly profile pattern** — adopt the team idea of paired profiles (`analytics-dev` for CLI, `analytics-dev-readonly` for Claude) to limit Claude to read-only AWS via SSO
-3. **`DATABRICKS_CLI_PATH` workaround** — team exports this to bypass SDK rejection of pixi's trampoline binary; investigate whether needed here
-4. **Stow `claude_desktop_config.json`** if Claude Desktop integration is wanted back
 
 ## License
 

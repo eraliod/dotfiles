@@ -253,6 +253,30 @@ PGPASSWORD=$RDS_PG_PROD_DOTCOM_PW psql -U $RDS_PG_PROD_DOTCOM_USER -d dot-com -p
 PGPASSWORD=$RDS_PG_PROD_DOTCOM_PW psql -U $RDS_PG_PROD_DOTCOM_USER -d dot-com -p 15632 -h localhost
 ```
 
+## AWS CLI Access
+
+Each work account has a paired profile in `~/.aws/config`: a functional one (`analytics-dev`, `prodplatform`, etc.) and a readonly counterpart with a `-readonly` suffix. The readonly variant uses the `ReadOnlyAccess` SSO role, which AWS itself enforces at the API level — destructive operations are refused by AWS regardless of what the CLI is told to do.
+
+**Default behavior:** When running `aws` CLI commands, ALWAYS pass `--profile <name>-readonly` explicitly. Do NOT rely on `AWS_PROFILE` env-var defaults — Damian's active `ap` session may point at a non-readonly profile for his own use.
+
+**Examples:**
+
+```bash
+aws s3 ls --profile analytics-dev-readonly
+aws ec2 describe-instances --profile analytics-prod-readonly
+aws sts get-caller-identity --profile devplatform-readonly
+```
+
+**When to use the non-readonly profile:** ONLY when Damian explicitly authorizes it. Triggers:
+
+- "Use the admin profile" or "use the non-readonly version"
+- An explicit profile name without the `-readonly` suffix
+- A task AWS blocks under the readonly role for a clearly authorized change (ask first; never assume)
+
+**Why this matters:** The readonly enforcement happens at the AWS SSO permission-set level, not via CLI command allowlists. A typo or misunderstanding cannot accidentally cause damage — AWS refuses the call. This is stronger than per-command allowlists.
+
+**Not applicable:** Redshift MCP and Databricks MCP profiles are pinned in their plugin configs (`plugins/redshift-mcp/.mcp.json`, `plugins/databricks-mcp-custom/.mcp.json`); this rule applies only to the `aws` CLI tool.
+
 ## Excalidraw MCP
 
 When using `mcp__excalidraw__create_view`:

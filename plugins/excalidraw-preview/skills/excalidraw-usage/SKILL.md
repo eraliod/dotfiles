@@ -5,7 +5,7 @@ description: This skill should be used when calling `mcp__excalidraw__create_vie
 
 # Excalidraw Preview Usage
 
-The excalidraw-preview plugin runs a local HTTP server at `127.0.0.1:8080` that renders Excalidraw diagrams immediately when `mcp__excalidraw__create_view` is called. The plugin pre-processes diagram payloads through `expandLabels()` and `fixStandaloneText()` in the preview's `index.html` before handing them to Excalidraw.
+The excalidraw-preview plugin runs a local HTTP server at `127.0.0.1:8080` that renders Excalidraw diagrams immediately when `mcp__excalidraw__create_view` is called. The plugin pre-processes diagram payloads through `expandLabels()`, `fixStandaloneText()`, and `wireArrowBindings()` in the preview's `index.html` before handing them to Excalidraw.
 
 The following conventions are required by the preview's polling and parsing logic. Departing from them produces silent render failures or zero-sized elements.
 
@@ -38,3 +38,8 @@ For top-level text elements not bound to a shape:
 ## Multi-Line Text
 
 - Use `\n` inside the label or text string. Works for both bound labels and standalone text elements.
+
+## Arrow Bindings
+
+- Author only the arrow side: `startBinding` / `endBinding` with `elementId` (plus `fixedPoint` per the MCP format). The preview's `wireArrowBindings()` adds the reciprocal `boundElements` entries on target shapes so arrows stay attached when shapes are dragged in an editor.
+- A binding whose `elementId` does not match any element in the payload is silently dropped — double-check ids on arrows.

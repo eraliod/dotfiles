@@ -159,6 +159,35 @@
         return result;
       }
 
+      // Excalidraw bindings are bidirectional: the arrow's start/endBinding is
+      // only half the contract. Drag handlers find arrows to update via the
+      // SHAPE's boundElements, so without the reciprocal entry the arrow is
+      // visually placed but functionally orphaned — it won't follow the shape.
+      // Payloads only author the arrow side; wire the reciprocals here.
+      function wireArrowBindings(elements) {
+        const byId = new Map(elements.map((el) => [el.id, el]));
+        for (const el of elements) {
+          if (el.type !== "arrow") continue;
+          for (const key of ["startBinding", "endBinding"]) {
+            const binding = el[key];
+            if (!binding || !binding.elementId) continue;
+            const target = byId.get(binding.elementId);
+            if (!target) {
+              el[key] = null;
+              continue;
+            }
+            // 0.17.6 binding fields; fixedPoint from payloads is ignored there
+            binding.focus = binding.focus ?? 0;
+            binding.gap = binding.gap ?? 4;
+            const bound = target.boundElements || (target.boundElements = []);
+            if (!bound.some((b) => b.id === el.id)) {
+              bound.push({ id: el.id, type: "arrow" });
+            }
+          }
+        }
+        return elements;
+      }
+
       function renderDiagram(elements) {
         const status = document.getElementById("status");
         status.textContent = "Updated " + new Date().toLocaleTimeString();
@@ -216,7 +245,7 @@
               el.type !== "restoreCheckpoint",
           );
 
-          renderDiagram(filtered);
+          renderDiagram(wireArrowBindings(filtered));
         } catch (err) {
           status.textContent = "Error: " + err.message;
           status.className = "error";

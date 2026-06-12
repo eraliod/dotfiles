@@ -16,5 +16,7 @@ echo "Excalidraw preview server starting at http://localhost:${PORT}"
 echo "Diagram updates will appear automatically when Claude creates views."
 echo "Press Ctrl+C to stop."
 
+# Mirror request logs into the access log so the ensure-server.sh heartbeat
+# can tell whether a browser tab is actively polling.
 cd "${PREVIEW_DIR}"
-python3 -m http.server "${PORT}" --bind 127.0.0.1
+python3 -m http.server "${PORT}" --bind 127.0.0.1 2> >(tee -a "${PREVIEW_DIR}/access.log" >&2)

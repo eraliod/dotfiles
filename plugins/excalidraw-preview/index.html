@@ -224,7 +224,16 @@
         }
       }
 
-      setInterval(poll, POLL_INTERVAL_MS);
+      // Tick from a dedicated worker: browsers throttle main-thread timers in
+      // hidden tabs and occluded windows (gaps of 30-60s), which would starve
+      // the access-log heartbeat that ensure-server.sh uses to decide whether
+      // a live viewer exists. Worker timers are exempt from that throttling.
+      const tickUrl = URL.createObjectURL(
+        new Blob([`setInterval(() => postMessage(0), ${POLL_INTERVAL_MS});`], {
+          type: "text/javascript",
+        }),
+      );
+      new Worker(tickUrl).onmessage = poll;
       poll();
     </script>
   </body>

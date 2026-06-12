@@ -279,9 +279,31 @@ aws sts get-caller-identity --profile devplatform-readonly
 
 ## Git Workflow
 
-- **Conventional commits:** `type(scope): subject` format
+- **Conventional commits:** `type(scope): subject` format, single-line subject
 - **Atomic commits:** One logical change per commit
+- **Message content:** Describe WHAT changed, never why. The "why" belongs in
+  the PR description or README (when applicable), not the commit message
+- **Multi-line messages:** Body must be single-line bullet points only — no
+  prose paragraphs
 - **No AI co-authorship:** Never include AI attribution in commits
+
+## Pull Requests
+
+- **tl;dr section (REQUIRED):** Every PR description must include a section
+  titled `tl;dr` explaining in layman's terms what is changing and why
+- **Keep it general:** No file names, line numbers, function signatures, or
+  framework internals — that detail belongs in the Summary section
+- **Keep it short:** One or two paragraphs, 2-4 sentences each
+
+**Good tl;dr:**
+
+> Adjusted function parameters to enable better testing. By removing the
+> client call from the function, we ensure we can test our code, not the
+> imported aws library.
+
+**Anti-pattern:** "Changed lines 104-106 in `abc.py` so `abc()` takes the aws
+client as a parameter because the pytest mechanism in `test_abc.py` lines
+223-248 requires..." — too specific for a tl;dr.
 
 ## Damian's JIRA Defaults (MANDATORY)
 

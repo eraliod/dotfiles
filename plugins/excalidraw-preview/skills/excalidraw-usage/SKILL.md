@@ -5,7 +5,7 @@ description: This skill should be used when calling `mcp__excalidraw__create_vie
 
 # Excalidraw Preview Usage
 
-The excalidraw-preview plugin runs a local HTTP server at `127.0.0.1:8080` that renders Excalidraw diagrams immediately when `mcp__excalidraw__create_view` is called. The plugin pre-processes diagram payloads through `expandLabels()`, `fixStandaloneText()`, and `wireArrowBindings()` in the preview's `index.html` before handing them to Excalidraw.
+The excalidraw-preview plugin runs a local HTTP server at `127.0.0.1:8080` that renders Excalidraw diagrams immediately when the Excalidraw MCP `create_view` tool is called (bundled with this plugin as `mcp__plugin_excalidraw-preview_excalidraw__create_view`; a separately configured global server named `excalidraw` also works). The plugin pre-processes diagram payloads through `expandLabels()`, `fixStandaloneText()`, and `wireArrowBindings()` in the preview's `index.html` before handing them to Excalidraw.
 
 The following conventions are required by the preview's polling and parsing logic. Departing from them produces silent render failures or zero-sized elements.
 

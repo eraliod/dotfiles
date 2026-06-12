@@ -16,17 +16,41 @@
         background: #fff;
         font-family: system-ui, sans-serif;
       }
-      #status {
+      #controls {
         position: fixed;
         top: 12px;
         right: 12px;
         z-index: 1000;
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+      #status {
         padding: 6px 12px;
         border-radius: 6px;
         font-size: 13px;
         background: #f0f0f0;
         color: #666;
         transition: all 0.3s;
+      }
+      #editToggle {
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 13px;
+        border: 1px solid #ccc;
+        background: #fff;
+        color: #333;
+        cursor: pointer;
+      }
+      #editToggle:hover {
+        background: #f0f0f0;
+      }
+      #banner {
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 13px;
+        background: #fff3cd;
+        color: #856404;
       }
       #status.updated {
         background: #d4edda;
@@ -47,7 +71,13 @@
     </style>
   </head>
   <body>
-    <div id="status" class="waiting">Waiting for diagram...</div>
+    <div id="controls">
+      <div id="banner" hidden>
+        New diagram available — Resume live discards your edits and loads it
+      </div>
+      <button id="editToggle">Edit</button>
+      <div id="status" class="waiting">Waiting for diagram...</div>
+    </div>
     <div id="canvas"></div>
 
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
@@ -61,6 +91,10 @@
       let lastModified = null;
       let root = null;
       let renderKey = 0;
+      let mode = "view";
+      let lastElements = [];
+      let pendingElements = null;
+      let excalidrawAPI = null;
 
       // Fix standalone text elements that arrive with width:0, height:0 from create_view.
       // Excalidraw won't render text with zero dimensions.
@@ -188,7 +222,7 @@
         return elements;
       }
 
-      function renderDiagram(elements) {
+      function renderDiagram(elements, editable = false) {
         const status = document.getElementById("status");
         status.textContent = "Updated " + new Date().toLocaleTimeString();
         status.className = "updated";
@@ -201,9 +235,12 @@
         root.render(
           React.createElement(ExcalidrawLib.Excalidraw, {
             key: renderKey,
+            excalidrawAPI: (api) => {
+              excalidrawAPI = api;
+            },
             initialData: { elements: elements, appState: { theme: "dark" } },
-            viewModeEnabled: true,
-            zenModeEnabled: true,
+            viewModeEnabled: !editable,
+            zenModeEnabled: !editable,
             gridModeEnabled: false,
             UIOptions: {
               canvasActions: { toggleTheme: true },
@@ -211,6 +248,32 @@
           }),
         );
       }
+
+      // Edit mode pauses live updates (the toggle IS the pause switch); new
+      // payloads are stashed and surfaced via banner instead of clobbering
+      // in-progress edits. Resume discards edits by design — export first.
+      document.getElementById("editToggle").addEventListener("click", () => {
+        const status = document.getElementById("status");
+        const banner = document.getElementById("banner");
+        const toggle = document.getElementById("editToggle");
+        if (mode === "view") {
+          mode = "edit";
+          toggle.textContent = "Resume live";
+          renderDiagram(
+            excalidrawAPI ? excalidrawAPI.getSceneElements() : lastElements,
+            true,
+          );
+          status.textContent = "Editing — updates paused";
+          status.className = "waiting";
+        } else {
+          mode = "view";
+          toggle.textContent = "Edit";
+          banner.hidden = true;
+          lastElements = pendingElements || lastElements;
+          pendingElements = null;
+          renderDiagram(lastElements);
+        }
+      });
 
       async function poll() {
         const status = document.getElementById("status");
@@ -245,7 +308,14 @@
               el.type !== "restoreCheckpoint",
           );
 
-          renderDiagram(wireArrowBindings(filtered));
+          const wired = wireArrowBindings(filtered);
+          if (mode === "edit") {
+            pendingElements = wired;
+            document.getElementById("banner").hidden = false;
+            return;
+          }
+          lastElements = wired;
+          renderDiagram(wired);
         } catch (err) {
           status.textContent = "Error: " + err.message;
           status.className = "error";

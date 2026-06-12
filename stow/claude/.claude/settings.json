@@ -27,7 +27,9 @@
       "Bash(test:*)",
       "Bash(tree:*)",
       "Bash(wc:*)",
-      "Read(//Users/damian.eralio/**)",
+      "Read(~/Documents/code/**)",
+      "Read(~/dotfiles/**)",
+      "Read(~/.claude/**)",
       "__ SEARCH __",
       "Bash(ast-grep:*)",
       "Bash(fd:*)",
@@ -129,7 +131,7 @@
       "Read(~/.aws/**)",
       "Read(~/.config/gcloud/**)",
       "Read(~/.databricks/**)",
-      "Read(~/.private)",
+      "Read(**/.private)",
       "Read(~/.ssh/**)"
     ],
     "ask": [

@@ -277,17 +277,6 @@ aws sts get-caller-identity --profile devplatform-readonly
 
 **Not applicable:** Redshift MCP and Databricks MCP profiles are pinned in their plugin configs (`plugins/redshift-mcp/.mcp.json`, `plugins/databricks-mcp-custom/.mcp.json`); this rule applies only to the `aws` CLI tool.
 
-## Excalidraw MCP
-
-When using `mcp__excalidraw__create_view`:
-
-- **Always send the full diagram.** Never use `restoreCheckpoint` — it doesn't work with the local preview system.
-- **Default font:** `fontFamily: 1` (Excalifont). Only use `fontFamily: 2` (clean sans-serif) when Damian requests "clean labels".
-- **Labels on shapes:** Use `label: { text: "...", fontSize: 20, fontFamily: 1 }` — the local preview's `expandLabels()` converts this into a bound text element. `fontSize` is required (preview defaults to 20 if omitted); `fontFamily` defaults to 1 (Excalifont). A bare string (`label: "..."`) is accepted as shorthand for `{ text: "..." }`.
-- **Standalone text:** Always provide `fontSize`. The preview's `fixStandaloneText()` will estimate `width`/`height`.
-- **Multi-line labels:** Use `\n` in label text. Works with shapes and standalone text.
-- **No checkpoints, no `restoreCheckpoint`.** Re-send the entire elements array every time.
-
 ## Git Workflow
 
 - **Conventional commits:** `type(scope): subject` format

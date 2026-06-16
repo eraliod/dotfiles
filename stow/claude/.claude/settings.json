@@ -30,6 +30,7 @@
       "Read(~/Documents/code/**)",
       "Read(~/dotfiles/**)",
       "Read(~/.claude/**)",
+      "Read(~/.config/superpowers/**)",
       "__ SEARCH __",
       "Bash(ast-grep:*)",
       "Bash(fd:*)",

@@ -17,7 +17,7 @@ fi
 
 if $install_pixi; then
 	echo "Installing pixi ${PIXI_VERSION}..."
-	curl -fsSL https://pixi.sh/install.sh | PIXI_VERSION="${PIXI_VERSION}" bash
+	curl -fsSL https://pixi.sh/install.sh | PIXI_VERSION="${PIXI_VERSION}" PIXI_NO_PATH_UPDATE=1 bash
 	export PATH="$HOME/.pixi/bin:$PATH"
 else
 	echo "pixi ${PIXI_VERSION#v} is already installed. Skipping..."

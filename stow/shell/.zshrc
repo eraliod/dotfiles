@@ -54,15 +54,14 @@ eval "$(uv generate-shell-completion zsh)"
 # fzf key bindings
 eval "$(fzf --zsh)"
 
+# Bash completion compatibility (required for `complete -C` below)
+autoload -U +X bashcompinit && bashcompinit
+
 # Terraform
 complete -o nospace -C terraform terraform
 
 # Terramate
 complete -o nospace -C /opt/homebrew/bin/terramate terramate
-
-# Terragrunt
-autoload -U +X bashcompinit && bashcompinit
-complete -o nospace -C /opt/homebrew/bin/terragrunt terragrunt
 
 ###############################################################################
 # Terramate Settings

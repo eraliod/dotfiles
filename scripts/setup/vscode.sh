@@ -28,7 +28,6 @@ extensions=(
 
 	# Git & AI Tools
 	eamodio.gitlens
-	github.copilot
 
 	# Theme
 	zhuangtongfa.material-theme

@@ -55,7 +55,7 @@ eval "$(uv generate-shell-completion zsh)"
 eval "$(fzf --zsh)"
 
 # Terraform
-complete -o nospace -C /opt/homebrew/bin/terraform terraform
+complete -o nospace -C terraform terraform
 
 # Terramate
 complete -o nospace -C /opt/homebrew/bin/terramate terramate

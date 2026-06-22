@@ -21,7 +21,6 @@ extensions=(
 	redhat.vscode-yaml
 
 	# Utilities
-	znck.grammarly
 	usernamehw.errorlens
 	vscodevim.vim
 	wayou.vscode-todo-highlight

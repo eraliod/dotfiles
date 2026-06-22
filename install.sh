@@ -104,6 +104,11 @@ PRIVATE
 	info "Created stow/shell/.private for sensitive environment variables"
 fi
 
+if ! command -v stow &>/dev/null; then
+	error "stow not found on PATH. Brew bundle likely failed earlier — fix the Brewfile and re-run."
+	exit 1
+fi
+
 cd "$STOW_DIR"
 
 STOW_FLAGS=(-t "$HOME" -R)

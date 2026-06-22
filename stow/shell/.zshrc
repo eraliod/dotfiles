@@ -25,7 +25,6 @@ ZSH_CUSTOM=$(brew --prefix)/share
 plugins=(
 	aliases
 	command-not-found
-	git
 	docker
 )
 

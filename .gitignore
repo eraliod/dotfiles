@@ -28,3 +28,6 @@ _bash_archive/
 
 # install.sh --force backup directory (timestamped backups of replaced files)
 .backup/
+
+# Development
+temp/

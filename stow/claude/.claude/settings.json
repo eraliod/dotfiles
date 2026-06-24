@@ -199,7 +199,7 @@
     "dotfile-plugins": {
       "source": {
         "source": "directory",
-        "path": "/Users/damian.eralio/dotfiles"
+        "path": "~/dotfiles"
       }
     },
     "superpowers-marketplace": {
@@ -211,7 +211,7 @@
     "kin-claude-plugins": {
       "source": {
         "source": "directory",
-        "path": "/Users/damian.eralio/Documents/code/claude-plugins"
+        "path": "~/Documents/code/claude-plugins"
       }
     },
     "astral-sh": {

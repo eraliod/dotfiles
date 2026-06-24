@@ -63,3 +63,9 @@ gbda() {
 get-uuid() {
     uuidgen | tr '[:upper:]' '[:lower:]'
 }
+
+# Restow every package under dotfiles/stow (picks up newly added files/dirs)
+stowr() {
+    local stow_dir="$HOME/dotfiles/stow"
+    (cd "$stow_dir" && stow -t "$HOME" -R */)
+}

@@ -21,8 +21,9 @@ Edit a base resume to fit a job description, using logged achievements. Load the
 2. **Obtain the JD** (URL -> fetch, path -> read, else text). If empty, ask.
 3. **Locate the base resume.** Use a path in `$ARGUMENTS` if given, else
    `resume-base.md`. If it does not exist, stop and tell the user to create it.
-4. **Choose the mode.** If `$ARGUMENTS` contains `interactive` or `batch`, use
-   it; otherwise ask (default: interactive).
+4. **Choose the mode.** If `$ARGUMENTS` contains a standalone token
+   `interactive` or `batch` (not a word embedded in the JD text, e.g. "batch
+   processing"), use it; otherwise ask (default: interactive).
 5. **Parse the resume** into jobs -> bullets, preserving order and untouched
    prose.
 6. **Classify each existing bullet:** Reword (same achievement, rephrased to the
@@ -40,4 +41,5 @@ Edit a base resume to fit a job description, using logged achievements. Load the
    in a Gaps note, not the resume.
 9. **Write to a copy** at
    `~/Documents/legion/achievements/resume-drafts/<role-slug>.md`. Never modify
-   `resume-base.md`. Remind the user to run `/legion`.
+   `resume-base.md`. Remind the user to run `/legion`. Do not run git against the
+   vault.

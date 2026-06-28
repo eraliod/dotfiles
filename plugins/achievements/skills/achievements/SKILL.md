@@ -22,6 +22,19 @@ Always use the literal `~/Documents/legion` prefix. **Never** run a `git`
 command against the vault — after writing files, tell the user to run `/legion`
 to sync.
 
+When scanning the achievements directory for notes, read only achievement notes
+(files whose frontmatter has a `date` field). **Skip** non-achievement files such
+as `README.md` and `resume-base.md`, and ignore the `reviews/` and
+`resume-drafts/` subdirectories.
+
+**Output filenames.** Saved outputs derive a stable slug so re-runs overwrite
+rather than multiply:
+
+- Resume drafts (`/resume-bullets`, `/resume`): `<role-slug>.md` where the slug
+  is `company-title`, kebab-cased (e.g. `acme-staff-data-engineer.md`); fall
+  back to just the title if the company is unknown.
+- Self-reviews (`/self-review`): `<YYYY>-self-review-<period>.md`.
+
 ## Core philosophy: terse, but reconstructable
 
 Notes must be short enough that capture is cheap, but structured enough that the

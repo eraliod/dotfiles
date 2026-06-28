@@ -1,7 +1,7 @@
 ---
 description: Turn a job description into ranked, tailored resume bullets drawn from your achievement notes
 argument-hint: <pasted JD, a path to a JD file, or a URL>
-allowed-tools: Read, Glob, WebFetch, Write, Skill
+allowed-tools: Read, Glob, WebFetch, Write, AskUserQuestion, Skill
 ---
 
 # Resume bullets from a job description
@@ -29,5 +29,5 @@ achievements. Load the `achievements` skill; use `references/output-guides.md`.
 6. **Gaps section.** List JD requirements with **no** matching achievement under
    a heading "Gaps — no achievement on file for X". Never fabricate.
 7. **Output to chat**; offer to save to
-   `~/Documents/legion/achievements/resume-drafts/<role-slug>.md` (remind to
-   `/legion` if saved).
+   `~/Documents/legion/achievements/resume-drafts/<role-slug>.md`. If saved,
+   remind the user to run `/legion`. Do not run git against the vault.

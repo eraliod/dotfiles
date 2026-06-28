@@ -43,9 +43,13 @@ tags: [databricks, ingestion, iac, leadership] # competency + tech, mirrors body
 - **No `role` field** — titles don't travel across companies. `scope` captures
   blast radius, which is an objective, company-relative claim.
 - **`metrics` mirrors the numbers in Result** so resume commands grab quantified
-  wins without re-parsing prose. Empty list allowed but discouraged.
+  wins without re-parsing prose. Empty list allowed but discouraged — see the
+  pattern-only exception in `capture-flow.md` (the one case where `[]` is fine).
 - **Tags appear twice** — frontmatter `tags:` (machine-queryable) and inline
-  `#tags` at body bottom (Obsidian-native). Keep them identical.
+  `#tags` at body bottom (Obsidian-native). The two must carry the **same set**
+  of tags (order-independent). **Frontmatter tags are bare** (`databricks`);
+  **inline tags carry `#`** (`#databricks`). Never put `#` inside the frontmatter
+  array.
 
 ## Date model
 

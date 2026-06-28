@@ -24,3 +24,7 @@ resumes); do not invent synonyms (`#coaching` vs `#mentorship`).
 Lowercase, hyphenated: `#databricks`, `#terraform`, `#postgres`, `#aws`,
 `#redshift`, `#pyspark`, `#github-actions`, etc. Reuse existing spellings; check
 sibling notes before coining a new one.
+
+Practice-level tags (e.g. `#iac`, `#ci-cd`, `#streaming`) also live here as
+free-form tags — they are NOT competency tags. Keep the controlled competency
+list (above) for the review/resume retrieval axis; everything else is free-form.

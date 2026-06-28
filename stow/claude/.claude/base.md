@@ -277,6 +277,25 @@ aws sts get-caller-identity --profile devplatform-readonly
 
 **Not applicable:** Redshift MCP and Databricks MCP profiles are pinned in their plugin configs (`plugins/redshift-mcp/.mcp.json`, `plugins/databricks-mcp-custom/.mcp.json`); this rule applies only to the `aws` CLI tool.
 
+## Code Comments
+
+Comments are fine when code is genuinely complex or non-obvious, but Claude
+over-uses them. Two rules:
+
+1. **Prefer one line over a block.** When a comment is warranted, default to a
+   single concise line. Reach for a multi-line block only when one line truly
+   cannot capture a non-obvious mechanism. Rationale that must survive
+   long-term belongs in the README; rationale that only explains a change
+   belongs in the PR description — not in the code.
+2. **Never comment about code that isn't there — the worst offender.** Do not
+   justify a change by referencing old/previous behavior, removed code, or
+   unbuilt future layers. Comment the code as it IS, not the diff that produced
+   it. e.g. NOT `# raw only for now; shred lands later`, NOT `# switched from X
+because Y`.
+
+**Exception — tests:** explanatory comments clarifying an otherwise-unclear test
+are welcome. Do not move test explanations into the README.
+
 ## Git Workflow
 
 - **Conventional commits:** `type(scope): subject` format, single-line subject

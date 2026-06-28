@@ -1,6 +1,6 @@
 ---
 name: achievements
-description: Use when capturing a work achievement, writing a self-review for a period, or producing/tailoring resume material from a job description. Defines where achievement notes live, the note schema, the tag vocabulary, and the terseness philosophy shared by the /achievement, /self-review, /resume-bullets, and /resume commands.
+description: Use when the user wants to capture, log, or track a work achievement or win; write or draft a self-review for a period (half, quarter, year); generate or tailor resume bullets or a full resume from a job description; or prep STAR interview answers from past work. Backs the /achievement, /self-review, /resume-bullets, and /resume commands and defines the shared note location, schema, tag vocabulary, and terseness rules.
 ---
 
 # Achievements

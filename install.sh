@@ -70,6 +70,25 @@ if [[ "$ADOPT_MODE" == true && "$FORCE_MODE" == true ]]; then
 fi
 
 ###############################################################################
+# Prime sudo (skip if --stow-only)
+###############################################################################
+# Homebrew cask upgrades (claude, chrome, spotify, vscode, ...) need sudo to
+# replace apps in /Applications. macOS re-prompts every ~5 min once the sudo
+# timestamp expires. Ask once up front, then keep the timestamp alive in the
+# background until this script exits so no further prompts appear.
+if [[ "$STOW_ONLY" == false ]]; then
+	info "Requesting administrator access up front (needed for some Homebrew casks)..."
+	sudo -v
+	while true; do
+		sudo -n true
+		sleep 60
+		kill -0 "$$" 2>/dev/null || exit
+	done &
+	SUDO_KEEPALIVE_PID=$!
+	trap 'kill "$SUDO_KEEPALIVE_PID" 2>/dev/null || true' EXIT
+fi
+
+###############################################################################
 # Install tools (skip if --stow-only)
 ###############################################################################
 if [[ "$STOW_ONLY" == false ]]; then

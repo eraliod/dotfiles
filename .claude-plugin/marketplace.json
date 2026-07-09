@@ -21,6 +21,11 @@
       "name": "databricks-mcp-custom",
       "source": "./plugins/databricks-mcp-custom",
       "description": "Personal Databricks MCP profiles with OAuth token expiry check"
+    },
+    {
+      "name": "achievements",
+      "source": "./plugins/achievements",
+      "description": "Achievement tracking: capture wins, build self-reviews and tailored resumes"
     }
   ]
 }

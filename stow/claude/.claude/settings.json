@@ -171,6 +171,7 @@
     "excalidraw-preview@dotfile-plugins": true,
     "redshift-mcp@dotfile-plugins": true,
     "databricks-mcp-custom@dotfile-plugins": true,
+    "achievements@dotfile-plugins": true,
     "superpowers@superpowers-marketplace": true,
     "episodic-memory@superpowers-marketplace": true,
     "superpowers-lab@superpowers-marketplace": true,

@@ -327,3 +327,8 @@ client as a parameter because the pytest mechanism in `test_abc.py` lines
 ## Damian's JIRA Defaults (MANDATORY)
 
 YOU MUST read @jira_instructions.md anytime you are asked to work with JIRA
+
+## Damian's PR Review Defaults (MANDATORY)
+
+YOU MUST read @pr_review_instructions.md anytime you review a pull request,
+use the pr-review-toolkit plugin, or dispatch review agents

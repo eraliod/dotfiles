@@ -8,7 +8,13 @@ PREVIEW_DIR="/tmp/excalidraw-preview"
 OUTPUT_FILE="${PREVIEW_DIR}/data.json"
 
 input=$(cat)
-elements=$(echo "${input}" | jq -r '.tool_input.elements // empty')
+# running a longer python command to avoid extra dependencies like jq
+elements=$(echo "${input}" | python3 -c '
+import json, sys
+e = json.load(sys.stdin).get("tool_input", {}).get("elements")
+if e is not None:
+    print(e if isinstance(e, str) else json.dumps(e))
+')
 
 if [ -z "${elements}" ]; then
   exit 0

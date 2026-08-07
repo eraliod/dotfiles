@@ -65,12 +65,12 @@ exposed = { gh = "gh" }
 
 [envs.databricks-cli]
 channels = ["conda-forge"]
-dependencies = { databricks-cli = "0.271.*" }
+dependencies = { databricks-cli = "1.10.*" }
 exposed = { databricks = "databricks" }
 
 [envs.databricks-sdk]
 channels = ["conda-forge"]
-dependencies = { databricks-sdk = "0.78.*" }
+dependencies = { databricks-sdk = "0.117.*" }
 
 [envs.awscli]
 channels = ["conda-forge"]

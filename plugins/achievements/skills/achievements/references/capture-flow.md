@@ -7,12 +7,19 @@ achievement note is useless downstream, so ASK when detail is missing.
 2. **Detect gaps** against what outputs need:
    - HARD (must resolve before writing): at least one **quantified metric**, a
      clear **what-you-personally-did**, an identifiable **date or span**.
+   - HARD for architecture-scoped / large-project work: at least two **design
+     forks** — the alternative considered and why it lost. If the conversation
+     hasn't surfaced them, ask ("what was the contested decision?", "what did
+     you almost build instead?", "what did you reverse?"). See the Action
+     framing rule in `note-schema.md`.
    - SOFT (ask if cheap): scope (team/cross-team/company-wide), key
      decisions/trade-offs.
 3. **Ask, batched, metrics first.** Use AskUserQuestion. Quantified results carry
    resume bullets, so push for numbers: "now it performs well" -> "By how much —
    runtime, cost, rows, error rate?" Accept "no hard number" for small
-   pattern-only achievements (see below).
+   pattern-only achievements (see below). If the work is framework/library-scale,
+   also ask whether to use the large-achievement expanded caps (+3 per body
+   section, `note-schema.md`) — the user must opt in explicitly.
 4. **Draft and confirm BEFORE writing.** Present: proposed title + filename slug,
    the headline, a compact summary of Context/Action/Result, and the
    competency + technology tags. Let the user edit any of it inline. Do not write

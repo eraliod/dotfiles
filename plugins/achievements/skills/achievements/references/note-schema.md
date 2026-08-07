@@ -40,6 +40,21 @@ tags: [databricks, ingestion, iac, leadership] # competency + tech, mirrors body
 
 - **Sentence caps are enforced at capture, not suggested.** Headline 1, Context
   <=3, Action <=5, Result <=4.
+- **Large-achievement exception.** For framework/library-scale work (designing
+  an entire framework, platform, or library), each body section's cap may be
+  raised by +3: Context <=6, Action <=8, Result <=7. Headline stays 1 — it is
+  the resume bullet. This room is ONLY for large achievements and ONLY with the
+  user's explicit go-ahead: ask at capture time, never assume.
+- **Action framing — decisions, not inventory.** For any achievement with an
+  architecture element (and all large projects), Action is a narrative of
+  design forks: each sentence = a fork + the road not taken + why. A feature
+  inventory proves nothing about the author — "for all they know, another
+  person made all the decisions." Include maturity markers when true:
+  reversing your own earlier design when evidence changed; applying one
+  consistent decision framework under review pressure, with rationale posted.
+  Keep a FEW technical highlights that show depth in service of the team
+  (advanced techniques powering a team capability) — a few, never a list.
+  Outcomes belong in Result as proof the decisions held, not as the story.
 - **No `role` field** — titles don't travel across companies. `scope` captures
   blast radius, which is an objective, company-relative claim.
 - **`metrics` mirrors the numbers in Result** so resume commands grab quantified

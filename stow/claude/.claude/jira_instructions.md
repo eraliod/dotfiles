@@ -10,7 +10,7 @@ YOU MUST use these defaults for ALL JIRA operations. These are not suggestions.
 
 **Default behavior when creating tickets:**
 
-→ Team = NO TEAM (null/unset) unless user specifies
+→ Team = Data & ML Ops (UUID: `f1df32de-280a-4d22-8256-7a6995af5bc8`) unless user specifies another team
 → Project = CORE (automatic)
 
 **When user says "my team" or "add to my team":**
@@ -23,7 +23,7 @@ YOU MUST use these defaults for ALL JIRA operations. These are not suggestions.
 
 **No exceptions:**
 
-- Default team = NO TEAM (you work across teams)
+- Default team = Data & ML Ops — NEVER create a ticket with no team
 - "my team" = Data & ML Ops, always
 - No project specified = CORE, always
 - Don't ask "which team?" or "which project?" unless user gives conflicting signals
@@ -69,4 +69,4 @@ YOU MUST use these defaults for ALL JIRA operations. These are not suggestions.
 
 **Implementation details** (field structure, API mechanics) are documented in `atlassian-toolkit:using-atlassian-api` skill under `api/jira/create-issue.md` and `api/jira/update-issue.md`.
 
-**No exceptions.** "My team" = Data & ML Ops. "My sprint" = Data Health Sprint (current active). "Create a ticket" = CORE project. Period.
+**No exceptions.** "My team" = Data & ML Ops. "My sprint" = Data Health Sprint (current active). "Create a ticket" = CORE project + Data & ML Ops team. Period.

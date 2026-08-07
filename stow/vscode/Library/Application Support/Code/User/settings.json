@@ -268,5 +268,13 @@
   // PRIVACY & TELEMETRY
   // ═══════════════════════════════════════════════════════════════════════════
   "telemetry.telemetryLevel": "off",
-  "redhat.telemetry.enabled": false
+  "redhat.telemetry.enabled": false,
+  "yaml.disableSchemaDetection": [
+    "**/.github/workflows/*.yml",
+    "**/.github/workflows/*.yaml",
+    "**/.gitea/workflows/*.yml",
+    "**/.gitea/workflows/*.yaml",
+    "**/.forgejo/workflows/*.yml",
+    "**/.forgejo/workflows/*.yaml"
+  ]
 }

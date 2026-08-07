@@ -40,7 +40,9 @@ rather than multiply:
 Notes must be short enough that capture is cheap, but structured enough that the
 same note can produce a resume bullet, a review paragraph, and a STAR answer.
 The body follows a compact STAR with hard sentence caps (see
-`references/note-schema.md`). Never write verbose notes.
+`references/note-schema.md`). Never write verbose notes. For architecture-scoped
+work, Action narrates design forks and judgment — not a feature inventory; see
+the Action framing rule in `references/note-schema.md`.
 
 ## The note schema
 

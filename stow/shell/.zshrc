@@ -40,6 +40,8 @@ source $ZSH/oh-my-zsh.sh
 
 # Add pixi to the path
 export PATH="$HOME/.pixi/bin:$PATH"
+# Add local bin to the path for user-installed binaries (claude-code)
+export PATH="$HOME/.local/bin:$PATH"
 
 ###############################################################################
 # Autocompletion Settings

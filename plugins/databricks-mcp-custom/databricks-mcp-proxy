@@ -26,7 +26,7 @@ if [[ "$PROFILE_VALID" != "true" ]]; then
 fi
 
 # Get workspace host from Databricks CLI config
-HOST=$(databricks auth describe --profile "$PROFILE" -o json 2>/dev/null | jq -r '.details.configuration.host.value')
+HOST=$(databricks auth describe --profile "$PROFILE" -o json | jq -r '.details.configuration.host.value')
 if [[ -z "$HOST" || "$HOST" == "null" ]]; then
   echo "Error: Could not determine host for profile: $PROFILE" >&2
   echo "Fix: databricks auth login -p $PROFILE" >&2
@@ -34,7 +34,7 @@ if [[ -z "$HOST" || "$HOST" == "null" ]]; then
 fi
 
 # Get fresh OAuth token
-TOKEN=$(databricks auth token --profile "$PROFILE" 2>/dev/null | jq -r '.access_token')
+TOKEN=$(databricks auth token --profile "$PROFILE" | jq -r '.access_token')
 if [[ -z "$TOKEN" || "$TOKEN" == "null" ]]; then
   echo "Error: Could not get token for profile: $PROFILE" >&2
   echo "Fix: databricks auth login -p $PROFILE" >&2
@@ -44,6 +44,9 @@ fi
 # Track MCP server start time for token expiry detection
 mkdir -p ~/.cache/claude
 date +%s > ~/.cache/claude/databricks-mcp-start-${PROFILE}
+
+# npx hangs silently when launched from some dirs (project root, $TMPDIR); /tmp is known-good
+cd /tmp
 
 # Start mcp-remote with dynamic credentials
 exec npx mcp-remote "${HOST}/api/2.0/mcp/sql" --header "Authorization: Bearer $TOKEN"

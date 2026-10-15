@@ -1,0 +1,24 @@
+# Ghostty config — reload with cmd+shift+, (opacity/blur changes need a full app restart)
+# All options: ghostty +show-config --default --docs
+
+# Appearance
+theme = dark:Catppuccin Mocha,light:Catppuccin Latte
+background-opacity = 0.85
+background-blur = 20
+font-size = 14
+window-padding-x = 10
+window-padding-y = 8
+window-padding-balance = true
+macos-titlebar-style = tabs
+unfocused-split-opacity = 0.8
+
+# Behavior
+macos-option-as-alt = true
+copy-on-select = clipboard
+mouse-hide-while-typing = true
+confirm-close-surface = false
+window-save-state = always
+shell-integration-features = cursor,sudo,title
+
+# Quick terminal drop-down (works from any app)
+keybind = global:ctrl+grave_accent=toggle_quick_terminal

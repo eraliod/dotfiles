@@ -1,0 +1,63 @@
+{
+  "skill_name": "omd-architect",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I want the claims team to own descriptions for the tables in processed.claims_api_public. They should be able to edit them, changes should need approval, and I want to see who changed what. How do I set that up?",
+      "expected_output": "A concrete OMD 2.0 setup: team + ownership + role/policy for edits, 2.0 Task/governance-workflow approval path, version history; grounded in the live instance and 2.0.x docs; no invented Kin team facts.",
+      "expectations": [
+        "Checks the live instance (e.g., references actual tables/state in processed.claims_api_public or notes current owners/teams are empty)",
+        "Uses 2.0-era concepts for approval (Tasks / governance workflows such as DescriptionUpdateTaskWorkflow), not the removed Suggestions feature as the primary mechanism",
+        "Covers all three asks: ownership/edit permission (team + role/policy), approval of changes, and change history (entity versions/activity)",
+        "Cites at least two specific docs.open-metadata.org v2.0.x URLs or source paths",
+        "Flags at least one uncertainty or limitation explicitly (e.g., owners can edit directly without approval, or something unverified)",
+        "Does not invent specific Kin business-unit members or team structure as fact",
+        "Answer is under ~700 words and ends with a concrete next step or offer to go deeper on named threads"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "What's the difference between a glossary term, a classification tag, and a metric in OMD? How would we model 'bound premium'?",
+      "expected_output": "Clear distinction of the three entity types in 2.0, a recommended modeling of bound premium (likely glossary term + metric entity linked to real Kin assets), grounded in instance and docs.",
+      "expectations": [
+        "Explains glossary term vs classification tag vs metric with a distinguishing purpose for each",
+        "Gives a concrete recommended model for 'bound premium' (not only a list of options)",
+        "References real Kin assets from the OMD instance or Kin's catalogs (e.g., a measure/bound premium table, processed or enterprise_data) in the example",
+        "Cites at least two specific docs.open-metadata.org v2.0.x URLs or source paths",
+        "Notes that Kin's definition of bound premium must be confirmed with an owner rather than asserting a definitive business definition",
+        "Answer is under ~700 words and ends with a concrete next step or offer to go deeper on named threads"
+      ],
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Why would we store our LLM instructions and context in OMD instead of git?",
+      "expected_output": "An honest comparison grounded in what OMD 2.0.x actually offers (Context Center memories/documents/articles, MCP company_context, semantic search) vs git; a split recommendation is acceptable.",
+      "expectations": [
+        "Names specific OMD 2.0 features (Context Center Memories/Documents/Articles, MCP retrieval such as company_context or semantic search)",
+        "Gives concrete advantages of git as well as OMD (balanced, does not simply advocate OMD)",
+        "Offers a recommendation for Kin (e.g., a split by content type), not just a neutral list",
+        "Mentions at least one practical prerequisite or limitation (e.g., embeddings config, object storage, Collate-only features, lock-in)",
+        "Cites at least one specific docs.open-metadata.org v2.0.x URL or source path",
+        "Answer is under ~700 words and ends with a concrete next step or offer to go deeper on named threads"
+      ],
+      "files": []
+    },
+    {
+      "id": 4,
+      "prompt": "What POC shortcuts will hurt us when we move to Kubernetes and Okta?",
+      "expected_output": "Specific risks from Kin's actual POC (EC2+Docker, basic auth, seeded admin, users/ownership tied to basic-auth identities, bot/connector config, data migration) with mitigations, grounded in the POC notes and 2.0 docs.",
+      "expectations": [
+        "Reflects Kin's actual POC setup (standalone EC2 with Docker, basic auth/seeded admin, SSM port-forward, or Unity Catalog connector)",
+        "Identifies identity migration risk: users/ownership/teams created under basic auth must map to Okta identities (e.g., email matching)",
+        "Addresses data/state migration of metadata (DB backup/restore or re-ingestion) to the Kubernetes deployment",
+        "Gives a mitigation or 'do now' action for each major risk",
+        "Does not insist on doing SSO or Kubernetes during the POC",
+        "Cites at least two specific docs.open-metadata.org v2.0.x URLs or source paths",
+        "Answer is under ~700 words and ends with a concrete next step or offer to go deeper on named threads"
+      ],
+      "files": []
+    }
+  ]
+}
